@@ -14,14 +14,16 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm">
-      <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <span className="font-display text-lg text-charcoal">T & N</span>
+    <header className="sticky top-0 z-50 bg-[#F7F4EE]/90 backdrop-blur-sm border-b border-[#EDE6D8]">
+      <nav className="mx-auto flex max-w-[1000px] items-center justify-between px-6 py-4">
+        <a href="#inicio" className="font-display text-xl font-medium text-[#2E2A26]">
+          T &amp; N
+        </a>
 
-        <ul className="hidden gap-8 font-body text-sm uppercase tracking-wide text-charcoal/80 md:flex">
+        <ul className="hidden gap-8 font-body text-[13px] uppercase tracking-[0.12em] text-[#2E2A26]/80 md:flex">
           {LINKS.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className="transition-colors hover:text-sage">
+              <a href={link.href} className="transition-colors hover:text-[#8A9A80]">
                 {link.label}
               </a>
             </li>
@@ -30,25 +32,28 @@ export function Navbar() {
 
         <button
           aria-label="Abrir menu"
-          className="flex flex-col gap-1.5 md:hidden"
+          className="flex flex-col gap-1.25 md:hidden cursor-pointer bg-none border-none p-1"
           onClick={() => setOpen((v) => !v)}
         >
-          <span className="h-0.5 w-6 bg-charcoal" />
-          <span className="h-0.5 w-6 bg-charcoal" />
-          <span className="h-0.5 w-6 bg-charcoal" />
+          <span className="h-0.5 w-6 bg-[#2E2A26]" />
+          <span className="h-0.5 w-6 bg-[#2E2A26]" />
+          <span className="h-0.5 w-6 bg-[#2E2A26]" />
         </button>
       </nav>
 
       {open && (
-        <ul className="flex flex-col gap-4 bg-cream px-6 pb-6 font-body text-sm uppercase tracking-wide text-charcoal/80 md:hidden">
+        <div className="flex flex-col gap-3 px-6 pb-6 pt-2 font-body text-[13px] uppercase tracking-[0.12em] text-[#2E2A26]/80 md:hidden bg-[#F7F4EE] border-b border-[#EDE6D8]">
           {LINKS.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} onClick={() => setOpen(false)}>
-                {link.label}
-              </a>
-            </li>
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="py-1 hover:text-[#8A9A80]"
+            >
+              {link.label}
+            </a>
           ))}
-        </ul>
+        </div>
       )}
     </header>
   );

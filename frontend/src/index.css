@@ -4,10 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --cream: #F7F4EE;
+  --beige: #EDE6D8;
+  --sage: #8A9A80;
+  --gold: #C9A96E;
+  --charcoal: #2E2A26;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-cream text-charcoal font-body antialiased;
+  margin: 0;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+h1, h2, .font-display {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
 }
