@@ -1,0 +1,218 @@
+// ============================================================
+// Wedding Platform — Prisma Schema (MySQL)
+// Arquitetura multi-tenant: cada "wedding" é um tenant isolado.
+// Todas as tabelas filhas referenciam wedding_id.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------
+// Usuários (noivos / administradores da plataforma)
+// ------------------------------------------------------------
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(COUPLE)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  weddings Wedding[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  COUPLE
+}
+
+// ------------------------------------------------------------
+// Wedding = Tenant. Slug único usado na URL: /casamento/{slug}
+// ------------------------------------------------------------
+model Wedding {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  partner1Name  String   @map("partner1_name")
+  partner2Name  String   @map("partner2_name")
+  tagline       String?
+  weddingDate   DateTime @map("wedding_date")
+  themeColors   Json?    @map("theme_colors")
+  heroImageUrl  String?  @map("hero_image_url")
+  storyText     String?  @db.Text @map("story_text")
+  plan          Plan     @default(FREE)
+  isPublished   Boolean  @default(false) @map("is_published")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  ownerId String @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  guests  Guest[]
+  rsvps   Rsvp[]
+  events  Event[]
+  photos  Photo[]
+  gifts   Gift[]
+  faqs    Faq[]
+
+  @@index([ownerId])
+  @@map("weddings")
+}
+
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+// ------------------------------------------------------------
+// Convidados
+// ------------------------------------------------------------
+model Guest {
+  id        String   @id @default(uuid())
+  weddingId String   @map("wedding_id")
+  wedding   Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  fullName  String   @map("full_name")
+  email     String?
+  phone     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  rsvp Rsvp?
+
+  @@index([weddingId])
+  @@map("guests")
+}
+
+// ------------------------------------------------------------
+// RSVP — confirmação de presença
+// ------------------------------------------------------------
+model Rsvp {
+  id             String       @id @default(uuid())
+  weddingId      String       @map("wedding_id")
+  wedding        Wedding      @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  guestId        String       @unique @map("guest_id")
+  guest          Guest        @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  status         RsvpStatus
+  companionsQty  Int          @default(0) @map("companions_qty")
+  companionNames String?      @db.Text @map("companion_names")
+  notes          String?      @db.Text
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  @@index([weddingId])
+  @@map("rsvps")
+}
+
+enum RsvpStatus {
+  CONFIRMED
+  DECLINED
+}
+
+// ------------------------------------------------------------
+// Eventos (cerimônia / recepção)
+// ------------------------------------------------------------
+model Event {
+  id        String    @id @default(uuid())
+  weddingId String    @map("wedding_id")
+  wedding   Wedding   @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  type      EventType
+  name      String
+  date      DateTime
+  time      String
+  address   String
+  latitude  Float?
+  longitude Float?
+
+  @@index([weddingId])
+  @@map("events")
+}
+
+enum EventType {
+  CEREMONY
+  RECEPTION
+}
+
+// ------------------------------------------------------------
+// Fotos (galeria)
+// ------------------------------------------------------------
+model Photo {
+  id        String   @id @default(uuid())
+  weddingId String   @map("wedding_id")
+  wedding   Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  url       String
+  caption   String?
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([weddingId])
+  @@map("photos")
+}
+
+// ------------------------------------------------------------
+// Lista de presentes
+// ------------------------------------------------------------
+model Gift {
+  id          String      @id @default(uuid())
+  weddingId   String      @map("wedding_id")
+  wedding     Wedding     @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?     @db.Text
+  imageUrl    String?     @map("image_url")
+  price       Decimal     @db.Decimal(10, 2)
+  isTaken     Boolean     @default(false) @map("is_taken")
+
+  orders      GiftOrder[]
+
+  @@index([weddingId])
+  @@map("gifts")
+}
+
+// Estrutura preparada para futura integração de pagamento
+model GiftOrder {
+  id          String      @id @default(uuid())
+  giftId      String      @map("gift_id")
+  gift        Gift        @relation(fields: [giftId], references: [id], onDelete: Cascade)
+
+  guestName   String      @map("guest_name")
+  guestEmail  String?     @map("guest_email")
+  status      OrderStatus @default(PENDING)
+  paymentRef  String?     @map("payment_ref") // id do gateway, quando integrado
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([giftId])
+  @@map("gift_orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+// ------------------------------------------------------------
+// FAQ
+// ------------------------------------------------------------
+model Faq {
+  id        String  @id @default(uuid())
+  weddingId String  @map("wedding_id")
+  wedding   Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+
+  question  String
+  answer    String  @db.Text
+  position  Int     @default(0)
+
+  @@index([weddingId])
+  @@map("faqs")
+}
