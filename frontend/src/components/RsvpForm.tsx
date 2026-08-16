@@ -68,15 +68,31 @@ export function RsvpForm() {
 
       {submitted ? (
         <div className="max-w-[480px] mx-auto bg-white p-8 rounded-2xl border border-[#8A9A80]/40 shadow-sm text-center">
-          <div className="w-12 h-12 rounded-full bg-[#8A9A80]/20 text-[#8A9A80] flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-            ✓
-          </div>
-          <h3 className="font-display text-2xl text-[#2E2A26] font-medium mb-2">
-            Confirmação Recebida!
-          </h3>
-          <p className="text-sm text-[#2E2A26]/80 font-light">
-            Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
-          </p>
+          {status === "CONFIRMED" ? (
+            <>
+              <div className="w-12 h-12 rounded-full bg-[#8A9A80]/20 text-[#8A9A80] flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+                ✓
+              </div>
+              <h3 className="font-display text-2xl text-[#2E2A26] font-medium mb-2">
+                Confirmação Recebida!
+              </h3>
+              <p className="text-sm text-[#2E2A26]/80 font-light leading-relaxed">
+                Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="w-12 h-12 rounded-full bg-[#C9A96E]/20 text-[#C9A96E] flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+                ♥
+              </div>
+              <h3 className="font-display text-2xl text-[#2E2A26] font-medium mb-2">
+                Resposta Registrada
+              </h3>
+              <p className="text-sm text-[#2E2A26]/80 font-light leading-relaxed">
+                Uma pena você não poder ir, {name}, mas agradecemos imensamente por nos avisar! Sentiremos sua falta nesse dia tão especial.
+              </p>
+            </>
+          )}
           <button
             onClick={() => {
               setSubmitted(false);
@@ -87,7 +103,7 @@ export function RsvpForm() {
             }}
             className="mt-6 text-xs uppercase tracking-wider text-[#8A9A80] border-b border-[#8A9A80] pb-0.5 cursor-pointer hover:text-[#2E2A26]"
           >
-            Enviar outra confirmação
+            Enviar outra resposta
           </button>
         </div>
       ) : (
