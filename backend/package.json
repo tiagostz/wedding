@@ -10,7 +10,7 @@
     "postinstall": "prisma generate --schema=../database/schema.prisma",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
-    "migrate:deploy": "prisma migrate deploy --schema=../database/schema.prisma",
+    "migrate:deploy": "prisma db push --schema=../database/schema.prisma",
     "prisma:generate": "prisma generate --schema=../database/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=../database/schema.prisma",
     "test": "vitest run"
