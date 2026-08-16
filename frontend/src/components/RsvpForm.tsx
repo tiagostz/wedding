@@ -32,7 +32,7 @@ export function RsvpForm() {
       notes,
     };
 
-    // 1. Enviar para a planilha do Google Sheets (se a URL do Webhook estiver configurada)
+    // 1. Enviar para a planilha do Google Sheets
     if (GOOGLE_SHEETS_URL) {
       try {
         await fetch(GOOGLE_SHEETS_URL, {
@@ -46,15 +46,12 @@ export function RsvpForm() {
       }
     }
 
-    // 2. Enviar para o banco de dados da API Backend
-    try {
-      await api.post("/rsvp", payload);
-    } catch (error) {
-      console.log("Confirmação registrada no sistema!");
-    } finally {
-      setLoading(false);
-      setSubmitted(true);
-    }
+    // 2. Enviar para a API Backend em segundo plano
+    api.post("/rsvp", payload).catch(() => {});
+
+    // 3. Concluir imediatamente e exibir a mensagem de confirmação
+    setLoading(false);
+    setSubmitted(true);
   };
 
   return (
