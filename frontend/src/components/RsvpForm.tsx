@@ -16,6 +16,13 @@ export function RsvpForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    // Permite apenas letras (incluindo acentos e ç) e espaços
+    const lettersOnly = rawValue.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+    setName(lettersOnly);
+  };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
     const numbersOnly = rawValue.replace(/\D/g, "").slice(0, 11);
@@ -132,7 +139,7 @@ export function RsvpForm() {
               placeholder="Seu nome completo"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
             />
           </div>
