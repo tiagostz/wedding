@@ -16,6 +16,21 @@ export function RsvpForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const numbersOnly = rawValue.replace(/\D/g, "").slice(0, 11);
+
+    let formatted = numbersOnly;
+    if (numbersOnly.length > 2) {
+      formatted = `(${numbersOnly.slice(0, 2)}) ${numbersOnly.slice(2)}`;
+    }
+    if (numbersOnly.length > 7) {
+      formatted = `(${numbersOnly.slice(0, 2)}) ${numbersOnly.slice(2, 7)}-${numbersOnly.slice(7, 11)}`;
+    }
+
+    setPhone(formatted);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -128,10 +143,11 @@ export function RsvpForm() {
             </label>
             <input
               type="tel"
-              placeholder="(19) 99999-9999"
+              placeholder="(19) 99609-0920"
               required
+              maxLength={15}
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
             />
           </div>
