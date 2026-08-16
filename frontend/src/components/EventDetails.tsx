@@ -11,24 +11,24 @@ export function EventDetails() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
         <div className="bg-[#EDE6D8] rounded-[16px] p-7">
           <h3 className="font-display text-[22px] font-medium text-[#2E2A26] mb-3">
-            Cerimônia
+            Cerimônia Religiosa
           </h3>
           <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            16 de outubro de 2026 — 16h
+            03 de outubro de 2026 — 11h da manhã
+          </p>
+          <p className="text-[14px] font-medium text-[#2E2A26] my-1">
+            Paróquia Sant'Ana
           </p>
           <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            Capela Santa Clara
-          </p>
-          <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            Rua das Flores, 123 — São Paulo, SP
+            Valinhos - SP
           </p>
           <a
-            href="https://maps.google.com"
+            href="https://www.google.com/maps/search/?api=1&query=Par%C3%B3quia+Sant%27Ana+Valinhos"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 text-[12px] uppercase tracking-[0.1em] border-b border-[#8A9A80] pb-[2px] text-[#2E2A26]"
+            className="inline-block mt-4 text-[12px] uppercase tracking-[0.1em] border-b border-[#8A9A80] pb-[2px] text-[#2E2A26] hover:text-[#8A9A80] transition-colors"
           >
-            Ver localização →
+            Ver localização no mapa →
           </a>
         </div>
 
@@ -37,21 +37,21 @@ export function EventDetails() {
             Recepção
           </h3>
           <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            19h
+            Após a cerimônia — 13h
+          </p>
+          <p className="text-[14px] font-medium text-[#2E2A26] my-1">
+            Recepção dos Noivos
           </p>
           <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            Espaço Jardim Sálvia
-          </p>
-          <p className="text-[14px] text-[#2E2A26]/80 my-1 font-light">
-            Av. das Oliveiras, 456 — São Paulo, SP
+            Valinhos - SP
           </p>
           <a
-            href="https://maps.google.com"
+            href="https://www.google.com/maps/search/?api=1&query=Valinhos+SP"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 text-[12px] uppercase tracking-[0.1em] border-b border-[#8A9A80] pb-[2px] text-[#2E2A26]"
+            className="inline-block mt-4 text-[12px] uppercase tracking-[0.1em] border-b border-[#8A9A80] pb-[2px] text-[#2E2A26] hover:text-[#8A9A80] transition-colors"
           >
-            Ver localização →
+            Ver localização no mapa →
           </a>
         </div>
       </div>

@@ -8,7 +8,7 @@ export function Footer() {
         Com amor, Tiago &amp; Thayanne
       </p>
       <p className="text-[13px] text-[#F7F4EE]/70 m-[4px_0] font-light">
-        16 de outubro de 2026
+        03 de outubro de 2026
       </p>
     </footer>
   );

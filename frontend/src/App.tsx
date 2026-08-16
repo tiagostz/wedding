@@ -14,8 +14,8 @@ const WEDDING_DATA: Wedding = {
   slug: "tiago-e-thayanne",
   partner1Name: "Tiago",
   partner2Name: "Thayanne",
-  tagline: "Vamos nos casar! Contamos com a sua presença para celebrar esse dia com a gente.",
-  weddingDate: "2026-10-16T16:00:00",
+  tagline: "Vamos nos casar! Contamos com a sua presença para celebrar esse dia especial com a gente.",
+  weddingDate: "2026-10-03T11:00:00",
   storyText: "Uma pequena linha do tempo com os momentos que nos trouxeram até aqui.",
   heroImageUrl: "/images/hero_bg.jpg",
 };
