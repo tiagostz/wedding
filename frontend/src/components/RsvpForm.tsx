@@ -15,7 +15,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState("CONFIRMED");
-  const [companions, setCompanions] = useState(0);
+  const [companions, setCompanions] = useState<number | "">("");
   const [companionNames, setCompanionNames] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,20 +44,12 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     setPhone(formatted);
   };
 
-  const handleCompanionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const quantity = Math.min(Math.max(Number(e.target.value) || 0, 0), 10);
-    setCompanions(quantity);
-    setCompanionNames((currentNames) =>
-      Array.from({ length: quantity }, (_, index) => currentNames[index] || "")
-    );
-  };
-
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const nextStatus = e.target.value;
     setStatus(nextStatus);
 
     if (nextStatus === "DECLINED") {
-      setCompanions(0);
+      setCompanions("");
       setCompanionNames([]);
     }
   };
@@ -67,7 +59,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     setLoading(true);
     setError("");
 
-    const companionsQty = Number.isFinite(companions)
+    const companionsQty = typeof companions === "number"
       ? Math.min(Math.max(companions, 0), 20)
       : 0;
     const normalizedCompanionNames = companionNames
@@ -195,7 +187,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               setName("");
               setEmail("");
               setPhone("");
-              setCompanions(0);
+              setCompanions("");
               setCompanionNames([]);
               setNotes("");
               setError("");
@@ -261,16 +253,28 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               Quantidade de acompanhantes
             </label>
             <input
-              type="number"
-              min="0"
-              max="10"
+              type="text"
+              placeholder="Ex.: 2"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={2}
               value={companions}
-              onChange={handleCompanionsChange}
+              onChange={(e) => {
+                const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 2);
+                const quantity = digitsOnly === "" ? "" : Math.min(Number(digitsOnly), 10);
+                setCompanions(quantity);
+                setCompanionNames((currentNames) =>
+                  Array.from(
+                    { length: quantity === "" ? 0 : quantity },
+                    (_, index) => currentNames[index] || ""
+                  )
+                );
+              }}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
             />
           </div>
 
-          {companions > 0 && (
+          {typeof companions === "number" && companions > 0 && (
             <div className="rounded-xl border border-[#8A9A80]/25 bg-[#F7F4EE]/60 p-4">
               <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 font-medium">
                 Nome dos acompanhantes
