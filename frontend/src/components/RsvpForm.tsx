@@ -16,6 +16,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState("CONFIRMED");
   const [companions, setCompanions] = useState(0);
+  const [companionNames, setCompanionNames] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -43,6 +44,24 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     setPhone(formatted);
   };
 
+  const handleCompanionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const quantity = Math.min(Math.max(Number(e.target.value) || 0, 0), 10);
+    setCompanions(quantity);
+    setCompanionNames((currentNames) =>
+      Array.from({ length: quantity }, (_, index) => currentNames[index] || "")
+    );
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const nextStatus = e.target.value;
+    setStatus(nextStatus);
+
+    if (nextStatus === "DECLINED") {
+      setCompanions(0);
+      setCompanionNames([]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -51,6 +70,25 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     const companionsQty = Number.isFinite(companions)
       ? Math.min(Math.max(companions, 0), 20)
       : 0;
+    const normalizedCompanionNames = companionNames
+      .slice(0, companionsQty)
+      .map((companionName) => companionName.trim());
+
+    if (normalizedCompanionNames.some((companionName) => !companionName)) {
+      setLoading(false);
+      setError("Informe o nome de todos os acompanhantes.");
+      return;
+    }
+
+    const companionNamesValue = normalizedCompanionNames.length
+      ? normalizedCompanionNames.join("\n")
+      : undefined;
+
+    if (companionNamesValue && companionNamesValue.length > 500) {
+      setLoading(false);
+      setError("Os nomes dos acompanhantes excedem o limite permitido.");
+      return;
+    }
 
     const payload = {
       weddingSlug,
@@ -59,6 +97,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       phone: phone.trim() || undefined,
       status,
       companionsQty,
+      companionNames: companionNamesValue,
       notes: notes.trim() || undefined,
     };
 
@@ -156,6 +195,8 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               setName("");
               setEmail("");
               setPhone("");
+              setCompanions(0);
+              setCompanionNames([]);
               setNotes("");
               setError("");
             }}
@@ -207,7 +248,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
             </label>
             <select
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={handleStatusChange}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
             >
               <option value="CONFIRMED">Sim, estarei presente</option>
@@ -224,10 +265,38 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               min="0"
               max="10"
               value={companions}
-              onChange={(e) => setCompanions(Number(e.target.value))}
+              onChange={handleCompanionsChange}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
             />
           </div>
+
+          {companions > 0 && (
+            <div className="rounded-xl border border-[#8A9A80]/25 bg-[#F7F4EE]/60 p-4">
+              <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 font-medium">
+                Nome dos acompanhantes
+              </p>
+              <div className="flex flex-col gap-3">
+                {companionNames.map((companionName, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    required
+                    placeholder={`Nome do acompanhante ${index + 1}`}
+                    value={companionName}
+                    onChange={(e) => {
+                      const sanitizedName = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+                      setCompanionNames((currentNames) =>
+                        currentNames.map((currentName, currentIndex) =>
+                          currentIndex === index ? sanitizedName : currentName
+                        )
+                      );
+                    }}
+                    className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
