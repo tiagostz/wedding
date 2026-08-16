@@ -14,9 +14,8 @@ export function Hero({ wedding }: HeroProps) {
       id="inicio"
       className="relative flex min-h-[90vh] flex-col items-center justify-center text-center p-6 bg-cover bg-center"
       style={{
-        backgroundImage: `linear-gradient(rgba(247,244,238,0.55), rgba(247,244,238,0.75)), url('${
-          wedding.heroImageUrl || "/images/hero_bg.jpg"
-        }')`,
+        backgroundImage: `linear-gradient(rgba(247,244,238,0.55), rgba(247,244,238,0.75)), url('${wedding.heroImageUrl || "/images/hero_bg.jpg"
+          }')`,
       }}
     >
       <p className="text-[12px] uppercase tracking-[0.3em] text-[#8A9A80] mb-2 font-medium">
@@ -32,7 +31,7 @@ export function Hero({ wedding }: HeroProps) {
       </p>
 
       <p className="font-display text-[22px] text-[#2E2A26] mb-6 font-medium">
-        16 de outubro de 2026
+        03 de outubro de 2026
       </p>
 
       <div className="flex gap-3 sm:gap-4 mb-8 flex-wrap justify-center">
