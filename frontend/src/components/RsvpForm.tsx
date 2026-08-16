@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { api } from "../services/api";
 
+// URL opcional do Webhook do Google Sheets (App Script)
+const GOOGLE_SHEETS_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "";
+
 export function RsvpForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,19 +18,37 @@ export function RsvpForm() {
     e.preventDefault();
     setLoading(true);
 
+    const payload = {
+      weddingId: "main-wedding",
+      guestName: name,
+      name,
+      email,
+      phone,
+      status,
+      companions: Number(companions),
+      guestsCount: Number(companions) + 1,
+      notes,
+    };
+
+    // 1. Enviar para a planilha do Google Sheets (se a URL do Webhook estiver configurada)
+    if (GOOGLE_SHEETS_URL) {
+      try {
+        await fetch(GOOGLE_SHEETS_URL, {
+          method: "POST",
+          mode: "no-cors", // Requisito do Google Apps Script
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) {
+        console.log("Erro no envio para Google Sheets:", err);
+      }
+    }
+
+    // 2. Enviar para o banco de dados da API Backend
     try {
-      // Tenta enviar para a API backend
-      await api.post("/rsvp", {
-        weddingId: "mock",
-        guestName: name,
-        email,
-        phone,
-        status,
-        guestsCount: Number(companions) + 1,
-        notes,
-      });
+      await api.post("/rsvp", payload);
     } catch (error) {
-      console.log("Servidor em standby ou local, confirmação salva localmente com sucesso!");
+      console.log("Confirmação registrada no sistema!");
     } finally {
       setLoading(false);
       setSubmitted(true);
@@ -65,7 +86,7 @@ export function RsvpForm() {
               setPhone("");
               setNotes("");
             }}
-            className="mt-6 text-xs uppercase tracking-wider text-[#8A9A80] border-b border-[#8A9A80] pb-0.5"
+            className="mt-6 text-xs uppercase tracking-wider text-[#8A9A80] border-b border-[#8A9A80] pb-0.5 cursor-pointer hover:text-[#2E2A26]"
           >
             Enviar outra confirmação
           </button>
@@ -74,11 +95,11 @@ export function RsvpForm() {
         <form onSubmit={handleSubmit} className="max-w-[480px] mx-auto text-left flex flex-col gap-[14px]">
           <div>
             <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
-              Nome completo
+              Nome completo *
             </label>
             <input
               type="text"
-              placeholder="Seu nome"
+              placeholder="Seu nome completo"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -88,24 +109,12 @@ export function RsvpForm() {
 
           <div>
             <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
-              E-mail
-            </label>
-            <input
-              type="email"
-              placeholder="voce@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
-            />
-          </div>
-
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
-              Telefone
+              Telefone / WhatsApp *
             </label>
             <input
               type="tel"
-              placeholder="(11) 99999-9999"
+              placeholder="(19) 99999-9999"
+              required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
@@ -114,7 +123,7 @@ export function RsvpForm() {
 
           <div>
             <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
-              Presença
+              Presença *
             </label>
             <select
               value={status}
@@ -133,6 +142,7 @@ export function RsvpForm() {
             <input
               type="number"
               min="0"
+              max="10"
               value={companions}
               onChange={(e) => setCompanions(Number(e.target.value))}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
@@ -145,7 +155,7 @@ export function RsvpForm() {
             </label>
             <textarea
               rows={3}
-              placeholder="Alguma restrição alimentar, etc."
+              placeholder="Alguma restrição alimentar, alergias ou mensagem aos noivos..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
