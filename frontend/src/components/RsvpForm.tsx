@@ -248,58 +248,62 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
-              Quantidade de acompanhantes
-            </label>
-            <input
-              type="text"
-              placeholder="Ex.: 2"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={2}
-              value={companions}
-              onChange={(e) => {
-                const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 2);
-                const quantity = digitsOnly === "" ? "" : Math.min(Number(digitsOnly), 10);
-                setCompanions(quantity);
-                setCompanionNames((currentNames) =>
-                  Array.from(
-                    { length: quantity === "" ? 0 : quantity },
-                    (_, index) => currentNames[index] || ""
-                  )
-                );
-              }}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
-            />
-          </div>
-
-          {typeof companions === "number" && companions > 0 && (
-            <div className="rounded-xl border border-[#8A9A80]/25 bg-[#F7F4EE]/60 p-4">
-              <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 font-medium">
-                Nome dos acompanhantes
-              </p>
-              <div className="flex flex-col gap-3">
-                {companionNames.map((companionName, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    required
-                    placeholder={`Nome do acompanhante ${index + 1}`}
-                    value={companionName}
-                    onChange={(e) => {
-                      const sanitizedName = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
-                      setCompanionNames((currentNames) =>
-                        currentNames.map((currentName, currentIndex) =>
-                          currentIndex === index ? sanitizedName : currentName
-                        )
-                      );
-                    }}
-                    className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
-                  />
-                ))}
+          {status === "CONFIRMED" && (
+            <>
+              <div>
+                <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+                  Quantidade de acompanhantes
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ex.: 2"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={2}
+                  value={companions}
+                  onChange={(e) => {
+                    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 2);
+                    const quantity = digitsOnly === "" ? "" : Math.min(Number(digitsOnly), 10);
+                    setCompanions(quantity);
+                    setCompanionNames((currentNames) =>
+                      Array.from(
+                        { length: quantity === "" ? 0 : quantity },
+                        (_, index) => currentNames[index] || ""
+                      )
+                    );
+                  }}
+                  className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+                />
               </div>
-            </div>
+
+              {typeof companions === "number" && companions > 0 && (
+                <div className="rounded-xl border border-[#8A9A80]/25 bg-[#F7F4EE]/60 p-4">
+                  <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 font-medium">
+                    Nome dos acompanhantes
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    {companionNames.map((companionName, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        required
+                        placeholder={`Nome do acompanhante ${index + 1}`}
+                        value={companionName}
+                        onChange={(e) => {
+                          const sanitizedName = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+                          setCompanionNames((currentNames) =>
+                            currentNames.map((currentName, currentIndex) =>
+                              currentIndex === index ? sanitizedName : currentName
+                            )
+                          );
+                        }}
+                        className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
           <div>
