@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { api } from "../services/api";
 
-// URL opcional do Webhook do Google Sheets (App Script)
-const GOOGLE_SHEETS_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || "";
+// URL do Webhook do Google Sheets (App Script)
+const GOOGLE_SHEETS_URL =
+  import.meta.env.VITE_SHEETS_WEBHOOK_URL ||
+  "https://script.google.com/macros/s/AKfycbzWvMm9Dmr7ht6G6fAEXGyxKCAGVDqr167GdPUtoc4xJgWxBPm0yks2WNi7uQPVMmEJ/exec";
 
 export function RsvpForm() {
   const [name, setName] = useState("");
