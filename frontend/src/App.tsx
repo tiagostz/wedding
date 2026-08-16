@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { Story } from "./components/Story";
@@ -8,6 +10,7 @@ import { RsvpForm } from "./components/RsvpForm";
 import { Faq } from "./components/Faq";
 import { Footer } from "./components/Footer";
 import { Wedding } from "./types/wedding";
+import { API_URL, fetchWeddingBySlug } from "./services/api";
 
 const WEDDING_DATA: Wedding = {
   id: "main-wedding",
@@ -21,15 +24,57 @@ const WEDDING_DATA: Wedding = {
 };
 
 export default function App() {
+  const { slug } = useParams<{ slug: string }>();
+  const [wedding, setWedding] = useState<Wedding | null>(slug ? null : WEDDING_DATA);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!slug) {
+      setWedding(WEDDING_DATA);
+      setError("");
+      return;
+    }
+
+    if (!API_URL) {
+      setWedding(null);
+      setError("A URL da API não está configurada para esta página de casamento.");
+      return;
+    }
+
+    let active = true;
+    setWedding(null);
+    setError("");
+
+    fetchWeddingBySlug(slug)
+      .then((data) => {
+        if (active) setWedding(data);
+      })
+      .catch(() => {
+        if (active) setError("Não foi possível carregar os dados deste casamento.");
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [slug]);
+
+  if (error) {
+    return <p className="p-8 text-center text-[#2E2A26]">{error}</p>;
+  }
+
+  if (!wedding) {
+    return <p className="p-8 text-center text-[#2E2A26]">Carregando...</p>;
+  }
+
   return (
     <div className="overflow-x-hidden min-h-screen bg-[#F7F4EE]">
       <Navbar />
-      <Hero wedding={WEDDING_DATA} />
-      <Story />
+      <Hero wedding={wedding} />
+      <Story storyText={wedding.storyText} />
       <Gallery />
       <EventDetails />
       <Gifts />
-      <RsvpForm />
+      <RsvpForm weddingSlug={wedding.slug} />
       <Faq />
       <Footer />
     </div>

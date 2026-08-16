@@ -1,7 +1,7 @@
 const PHOTOS = [
-  { label: "Foto 1", src: "/images/hero_bg.jpg" },
-  { label: "Foto 2", src: "/images/proposal.jpg" },
-  { label: "Foto 3", src: "/images/rings.jpg" },
+  { label: "Foto 1", src: "/images/wedding-hero.png" },
+  { label: "Foto 2", src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" },
+  { label: "Foto 3", src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" },
   { label: "Foto 4", src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" },
   { label: "Foto 5", src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" },
   { label: "Foto 6", src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop" },
@@ -29,6 +29,10 @@ export function Gallery() {
             <img
               src={item.src}
               alt={item.label}
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/images/wedding-hero.png";
+              }}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>

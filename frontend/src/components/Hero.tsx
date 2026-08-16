@@ -8,6 +8,11 @@ interface HeroProps {
 export function Hero({ wedding }: HeroProps) {
   const weddingDate = new Date(wedding.weddingDate);
   const { days, hours, minutes, seconds } = useCountdown(weddingDate);
+  const formattedWeddingDate = weddingDate.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <section
@@ -31,7 +36,7 @@ export function Hero({ wedding }: HeroProps) {
       </p>
 
       <p className="font-display text-[22px] text-[#2E2A26] mb-6 font-medium">
-        03 de outubro de 2026
+        {formattedWeddingDate}
       </p>
 
       <div className="flex gap-3 sm:gap-4 mb-8 flex-wrap justify-center">

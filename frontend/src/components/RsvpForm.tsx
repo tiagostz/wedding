@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { api } from "../services/api";
+import { api, API_URL } from "../services/api";
+
+interface RsvpFormProps {
+  weddingSlug: string;
+}
 
 // URL do Webhook do Google Sheets (App Script)
 const GOOGLE_SHEETS_URL =
   import.meta.env.VITE_SHEETS_WEBHOOK_URL ||
   "https://script.google.com/macros/s/AKfycbzWvMm9Dmr7ht6G6fAEXGyxKCAGVDqr167GdPUtoc4xJgWxBPm0yks2WNi7uQPVMmEJ/exec";
 
-export function RsvpForm() {
+export function RsvpForm({ weddingSlug }: RsvpFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -15,6 +19,7 @@ export function RsvpForm() {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
@@ -41,37 +46,67 @@ export function RsvpForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+
+    const companionsQty = Number.isFinite(companions)
+      ? Math.min(Math.max(companions, 0), 20)
+      : 0;
 
     const payload = {
-      weddingId: "main-wedding",
-      guestName: name,
-      name,
-      email,
-      phone,
+      weddingSlug,
+      fullName: name.trim(),
+      email: email.trim() || undefined,
+      phone: phone.trim() || undefined,
       status,
-      companions: Number(companions),
-      guestsCount: Number(companions) + 1,
-      notes,
+      companionsQty,
+      notes: notes.trim() || undefined,
     };
+
+    const sheetsPayload = {
+      ...payload,
+      weddingId: weddingSlug,
+      guestName: payload.fullName,
+      name: payload.fullName,
+      companions: companionsQty,
+      guestsCount: companionsQty + 1,
+    };
+
+    const requests: Promise<boolean>[] = [];
 
     // 1. Enviar para a planilha do Google Sheets
     if (GOOGLE_SHEETS_URL) {
-      try {
-        await fetch(GOOGLE_SHEETS_URL, {
+      requests.push(
+        fetch(GOOGLE_SHEETS_URL, {
           method: "POST",
-          mode: "no-cors", // Requisito do Google Apps Script
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (err) {
-        console.log("Erro no envio para Google Sheets:", err);
-      }
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(sheetsPayload),
+        })
+          .then(() => true)
+          .catch(() => false)
+      );
     }
 
-    // 2. Enviar para a API Backend em segundo plano
-    api.post("/rsvp", payload).catch(() => {});
+    // 2. Enviar para a API Backend quando ela estiver configurada
+    if (API_URL) {
+      requests.push(
+        api
+          .post("/rsvp", payload)
+          .then(() => true)
+          .catch(() => false)
+      );
+    }
 
-    // 3. Concluir imediatamente e exibir a mensagem de confirmação
+    const results = await Promise.all(requests);
+    const saved = results.some(Boolean);
+
+    if (!saved) {
+      setLoading(false);
+      setError("Não foi possível enviar sua resposta. Tente novamente em instantes.");
+      return;
+    }
+
+    // 3. Só confirmar na tela depois que pelo menos um destino aceitou o envio
     setLoading(false);
     setSubmitted(true);
   };
@@ -122,6 +157,7 @@ export function RsvpForm() {
               setEmail("");
               setPhone("");
               setNotes("");
+              setError("");
             }}
             className="mt-6 text-xs uppercase tracking-wider text-[#8A9A80] border-b border-[#8A9A80] pb-0.5 cursor-pointer hover:text-[#2E2A26]"
           >
@@ -130,6 +166,12 @@ export function RsvpForm() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="max-w-[480px] mx-auto text-left flex flex-col gap-[14px]">
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </p>
+          )}
+
           <div>
             <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
               Nome completo *

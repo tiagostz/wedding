@@ -1,4 +1,8 @@
-export function Story() {
+interface StoryProps {
+  storyText?: string;
+}
+
+export function Story({ storyText }: StoryProps) {
   const items = [
     {
       title: "Como nos conhecemos",
@@ -27,7 +31,7 @@ export function Story() {
         Do primeiro encontro ao "sim"
       </h2>
       <p className="max-w-[520px] mx-auto mb-10 text-[#2E2A26]/75 text-[15px] leading-[1.6] font-light">
-        Uma pequena linha do tempo com os momentos que nos trouxeram até aqui.
+        {storyText || "Uma pequena linha do tempo com os momentos que nos trouxeram até aqui."}
       </p>
 
       <div className="flex flex-col gap-7 text-left max-w-[560px] mx-auto">

@@ -31,8 +31,9 @@ export function Navbar() {
         </ul>
 
         <button
-          aria-label="Abrir menu"
-          className="flex flex-col gap-1.25 md:hidden cursor-pointer bg-none border-none p-1"
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
+          className="flex flex-col gap-1 md:hidden cursor-pointer bg-none border-none p-1"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="h-0.5 w-6 bg-[#2E2A26]" />

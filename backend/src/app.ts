@@ -10,12 +10,21 @@ import { notFoundHandler } from "./middlewares/notFoundHandler";
 
 export function createApp(): Application {
   const app = express();
+  const allowedOrigins = process.env.CORS_ORIGIN
+    ?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
   app.use(helmet());
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN?.split(",") ?? "*",
-      credentials: true,
+      origin:
+        allowedOrigins && allowedOrigins.length > 0
+          ? allowedOrigins.length === 1
+            ? allowedOrigins[0]
+            : allowedOrigins
+          : false,
+      credentials: Boolean(allowedOrigins?.length),
     })
   );
   app.use(express.json({ limit: "2mb" }));

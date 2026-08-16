@@ -21,11 +21,12 @@ function diff(targetDate: Date): Countdown {
 /** Contador regressivo que atualiza a cada segundo até a data do casamento. */
 export function useCountdown(targetDate: Date): Countdown {
   const [value, setValue] = useState<Countdown>(() => diff(targetDate));
+  const targetTimestamp = targetDate.getTime();
 
   useEffect(() => {
-    const id = setInterval(() => setValue(diff(targetDate)), 1000);
+    const id = setInterval(() => setValue(diff(new Date(targetTimestamp))), 1000);
     return () => clearInterval(id);
-  }, [targetDate]);
+  }, [targetTimestamp]);
 
   return value;
 }
