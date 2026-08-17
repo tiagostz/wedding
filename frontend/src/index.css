@@ -556,6 +556,12 @@ a {
   line-height: 1.5;
 }
 
+.field-help-link {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .rsvp-form .preview-button {
   width: 100%;
   margin-top: 5px;

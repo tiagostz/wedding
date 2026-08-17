@@ -18,7 +18,7 @@ export function Faq() {
   ];
 
   return (
-    <section id="faq" className="preview-section faq-section">
+    <section id="perguntas" className="preview-section faq-section">
       <div className="container">
         <div className="section-head">
           <p className="eyebrow">Perguntas</p>

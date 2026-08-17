@@ -272,7 +272,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
                   className=""
                 />
                 <p className="field-help">
-                  Em caso de dúvida sobre acompanhantes, consulte as perguntas abaixo. Lá explicamos quais acompanhantes podem ser incluídos.
+                  Em caso de dúvida sobre acompanhantes, consulte as <a href="#perguntas" className="field-help-link">perguntas abaixo</a>. Lá explicamos quais acompanhantes podem ser incluídos.
                 </p>
               </div>
 
