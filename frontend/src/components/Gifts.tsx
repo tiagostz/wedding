@@ -22,7 +22,7 @@ export function Gifts() {
           <p className="eyebrow">Se quiser nos presentear</p>
           <h2>Sua presença já é o maior presente</h2>
           <p>
-            Os presentes não serão necessários, mas deixamos nossa chave Pix caso você queira nos presentear.
+            Vamos deixar nossa chave Pix abaixo caso vocês queiram nos presentear, agradecemos de coração ❤️
           </p>
         </div>
 

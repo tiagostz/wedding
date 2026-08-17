@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "#evento", label: "Evento" },
-  { href: "#presentes", label: "Pix" },
+  { href: "#presentes", label: "Presentes" },
   { href: "#presenca", label: "Presença" },
   { href: "#faq", label: "FAQ" },
 ];
