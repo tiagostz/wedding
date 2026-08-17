@@ -2,7 +2,7 @@ export function Faq() {
   const faqItems = [
     {
       q: "Qual o traje?",
-      a: "Aquele que você se sentir bem",
+      a: "Escolha o traje que fizer você se sentir bem. O mais importante é estar confortável para celebrar esse dia especial conosco.",
       open: true,
     },
     {
@@ -12,7 +12,7 @@ export function Faq() {
     },
     {
       q: "Posso levar acompanhante?",
-      a: "Sim! São considerados acompanhantes namorado(a), marido ou esposa e filhos(as). Pedimos a gentileza de restringir o convite a essas pessoas.\n\nAlém disso, é importante cadastrar seu acompanhamento no formulário de presença.",
+      a: "Sim! São considerados acompanhantes namorado(a), marido ou esposa e filhos(as). Pedimos, por gentileza, que o convite seja restrito a essas pessoas.\n\nAlém disso, é importante cadastrar seu acompanhante no formulário de confirmação de presença.",
       open: false,
     },
   ];
