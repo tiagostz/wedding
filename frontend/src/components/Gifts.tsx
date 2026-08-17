@@ -1,119 +1,39 @@
 import { useState } from "react";
 
-const GIFTS = [
-  {
-    id: 1,
-    title: "Jantar romântico",
-    price: "R$ 250",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Lua de mel",
-    price: "R$ 500",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Café da manhã",
-    price: "R$ 150",
-    image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?q=80&w=600&auto=format&fit=crop",
-  },
-];
+const PIX_KEY = "acef839b-85c1-4437-bf93-19aca4dd9467";
 
 export function Gifts() {
-  const [selectedGift, setSelectedGift] = useState<{ title: string; price: string } | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyPixKey = async () => {
+    try {
+      await navigator.clipboard.writeText(PIX_KEY);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   return (
     <section id="presentes" className="preview-section gifts-section">
-      <div className="container">
-      <div className="section-head">
-        <p className="eyebrow">Lista de presentes</p>
-        <h2>Se quiser nos presentear</h2>
-        <p>
-          Sua presença já é o maior presente. Mas, se quiser nos ajudar a começar essa nova fase, deixamos algumas sugestões.
-        </p>
-      </div>
-
-      <div className="gift-grid">
-        {GIFTS.map((gift) => (
-          <div
-            key={gift.id}
-            className="gift-card"
-          >
-            <div
-              className="gift-image"
-              style={{ backgroundImage: `url('${gift.image}')` }}
-              role="img"
-              aria-label={gift.title}
-            >
-            </div>
-            <div className="gift-body">
-              <h3>
-                {gift.title}
-              </h3>
-              <p className="gift-price">
-                {gift.price}
-              </p>
-              <button
-                onClick={() => setSelectedGift(gift)}
-                className="preview-button"
-              >
-                Presentear
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      </div>
-
-      {/* Gift Modal */}
-      {selectedGift && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedGift(null)}
-        >
-          <div
-            className="bg-[#F7F4EE] p-6 sm:p-8 rounded-2xl max-w-sm w-full text-center border border-[#EDE6D8] shadow-2xl relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedGift(null)}
-              className="absolute top-3 right-3 text-lg font-bold text-[#2E2A26]/60 hover:text-[#2E2A26]"
-            >
-              ✕
-            </button>
-            <span className="text-[11px] uppercase tracking-widest text-[#8A9A80] font-semibold">
-              Chave Pix dos Noivos
-            </span>
-            <h3 className="font-display text-2xl text-[#2E2A26] font-medium mt-1 mb-2">
-              {selectedGift.title} ({selectedGift.price})
-            </h3>
-            <p className="text-xs text-[#2E2A26]/70 mb-4 font-light">
-              Você pode realizar o presente via PIX escaneando o código ou copiando a chave abaixo:
-            </p>
-            <div className="bg-white p-3 rounded-xl inline-block mb-4 border border-[#8A9A80]/20">
-              <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TIAGOETHAYANNE`}
-                alt="QR Code Pix"
-                className="w-36 h-36"
-              />
-            </div>
-            <p className="text-[11px] font-mono bg-white p-2.5 rounded-lg border border-[#8A9A80]/30 select-all text-[#2E2A26] break-all">
-              pix@casamentotiagoethayanne.com.br
-            </p>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText("pix@casamentotiagoethayanne.com.br");
-                alert("Chave Pix copiada para a área de transferência!");
-              }}
-              className="mt-4 w-full py-2.5 rounded-full bg-[#8A9A80] text-white text-xs uppercase tracking-wider font-medium hover:bg-[#2E2A26] transition-colors"
-            >
-              Copiar Chave Pix
-            </button>
-          </div>
+      <div className="container pix-wrap">
+        <div className="section-head">
+          <p className="eyebrow">Se quiser nos presentear</p>
+          <h2>Sua presença já é o maior presente</h2>
+          <p>
+            Os presentes não serão necessários, mas deixamos nossa chave Pix caso você queira nos presentear.
+          </p>
         </div>
-      )}
+
+        <div className="pix-card">
+          <p className="pix-label">Chave Pix</p>
+          <code className="pix-key">{PIX_KEY}</code>
+          <button type="button" className="preview-button" onClick={copyPixKey}>
+            {copied ? "Chave copiada" : "Copiar chave Pix"}
+          </button>
+        </div>
+      </div>
     </section>
   );
 }

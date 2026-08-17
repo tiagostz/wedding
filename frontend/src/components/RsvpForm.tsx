@@ -147,8 +147,8 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       <div className="container rsvp-wrap">
       <div className="section-head">
         <p className="eyebrow">Confirmação de presença</p>
-        <h2>Você vai estar com a gente?</h2>
-        <p>Preencha o formulário abaixo até 30 dias antes da data.</p>
+        <h2>Você estará conosco?</h2>
+        <p>Preencha o formulário abaixo até dia 21/08/2026 (Sexta-feira)</p>
       </div>
 
       {submitted ? (

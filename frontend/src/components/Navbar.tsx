@@ -1,10 +1,8 @@
 import { useState } from "react";
 
 const LINKS = [
-  { href: "#historia", label: "Nossa história" },
   { href: "#evento", label: "Evento" },
-  { href: "#fotos", label: "Fotos" },
-  { href: "#presentes", label: "Presentes" },
+  { href: "#presentes", label: "Pix" },
   { href: "#presenca", label: "Presença" },
   { href: "#faq", label: "FAQ" },
 ];

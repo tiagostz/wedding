@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
-import { Story } from "./components/Story";
-import { Gallery } from "./components/Gallery";
 import { EventDetails } from "./components/EventDetails";
 import { Gifts } from "./components/Gifts";
 import { RsvpForm } from "./components/RsvpForm";
@@ -70,8 +68,6 @@ export default function App() {
     <div className="app-shell">
       <Navbar />
       <Hero wedding={wedding} />
-      <Story storyText={wedding.storyText} />
-      <Gallery />
       <EventDetails />
       <Gifts />
       <RsvpForm weddingSlug={wedding.slug} />

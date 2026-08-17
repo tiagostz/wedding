@@ -456,6 +456,47 @@ a {
   font-size: 9px;
 }
 
+.pix-wrap {
+  max-width: 760px;
+}
+
+.pix-card {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.pix-label {
+  margin: 0 0 12px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+}
+
+.pix-key {
+  display: block;
+  padding: 14px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 13px;
+  user-select: all;
+}
+
+.pix-card .preview-button {
+  margin-top: 20px;
+}
+
 .rsvp-wrap {
   max-width: 720px;
   margin: 0 auto;
@@ -632,6 +673,7 @@ a {
   padding: 0 0 22px;
   color: var(--muted);
   font-size: 13px;
+  white-space: pre-line;
 }
 
 .site-footer {
