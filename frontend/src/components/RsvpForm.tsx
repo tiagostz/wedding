@@ -271,6 +271,9 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
                   }}
                   className=""
                 />
+                <p className="field-help">
+                  Em caso de dúvida sobre acompanhantes, consulte as perguntas frequentes abaixo. Lá explicamos quem pode ser incluído no convite.
+                </p>
               </div>
 
               {typeof companions === "number" && companions > 0 && (

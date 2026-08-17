@@ -549,6 +549,13 @@ a {
   resize: vertical;
 }
 
+.field-help {
+  margin: 8px 2px 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .rsvp-form .preview-button {
   width: 100%;
   margin-top: 5px;
@@ -702,6 +709,13 @@ a {
   margin-top: 35px;
   font: 500 25px "Cormorant Garamond", Georgia, serif;
   letter-spacing: 2px;
+}
+
+.developed-by {
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  letter-spacing: 1px;
 }
 
 .back-to-top {
