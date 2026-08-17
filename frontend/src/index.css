@@ -369,6 +369,16 @@ a {
   text-transform: uppercase;
 }
 
+.event-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.event-links .map-link {
+  margin-top: 22px;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr 0.85fr;
