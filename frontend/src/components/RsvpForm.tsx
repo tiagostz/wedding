@@ -142,6 +142,33 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     setSubmitted(true);
   };
 
+  const whatsappReminderUrl = (() => {
+    if (status !== "CONFIRMED") return "";
+
+    const whatsappNumber = phone.replace(/\D/g, "");
+    const numberWithCountryCode = whatsappNumber.startsWith("55")
+      ? whatsappNumber
+      : `55${whatsappNumber}`;
+    const names = companionNames.filter((companionName) => companionName.trim());
+    const companionsText = names.length
+      ? names.join(", ")
+      : "Nenhum acompanhante";
+    const message = [
+      `Oi! Minha presença no casamento de Tiago e Thayanne está confirmada 💍`,
+      "",
+      "📅 Data: 03 de outubro de 2026, às 11h",
+      "📍 Cerimônia: Paróquia Sant'Ana",
+      "Rua Mato Grosso, 305 — Vila Santana, Valinhos — SP",
+      "",
+      "🎉 Celebração: Macarronada Italiana",
+      "Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP",
+      "",
+      `👥 Acompanhantes: ${companionsText}`,
+    ].join("\n");
+
+    return `https://wa.me/${numberWithCountryCode}?text=${encodeURIComponent(message)}`;
+  })();
+
   return (
     <section id="presenca" className="preview-section rsvp-section">
       <div className="container rsvp-wrap">
@@ -163,6 +190,17 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               </h3>
               <p>
                 Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
+              </p>
+              <a
+                href={whatsappReminderUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-reminder-button"
+              >
+                Enviar lembrete pelo WhatsApp
+              </a>
+              <p className="whatsapp-reminder-help">
+                O WhatsApp abrirá com a mensagem pronta. Basta tocar em enviar.
               </p>
             </>
           ) : (
