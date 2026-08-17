@@ -106,15 +106,20 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
 
     // 1. Enviar para a planilha do Google Sheets
     if (GOOGLE_SHEETS_URL) {
+      const sheetsController = new AbortController();
+      const sheetsTimeout = window.setTimeout(() => sheetsController.abort(), 8000);
+
       requests.push(
         fetch(GOOGLE_SHEETS_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(sheetsPayload),
+          signal: sheetsController.signal,
         })
           .then(() => true)
           .catch(() => false)
+          .finally(() => window.clearTimeout(sheetsTimeout))
       );
     }
 
@@ -128,8 +133,26 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       );
     }
 
-    const results = await Promise.all(requests);
-    const saved = results.some(Boolean);
+    // Considera a confirmação concluída assim que um dos destinos aceitar o envio.
+    // O outro destino continua processando em segundo plano, sem prender a tela.
+    let saved = false;
+    if (requests.length > 0) {
+      saved = await new Promise<boolean>((resolve) => {
+        let pending = requests.length;
+
+        requests.forEach((request) => {
+          request.then((accepted) => {
+            if (accepted) {
+              resolve(true);
+              return;
+            }
+
+            pending -= 1;
+            if (pending === 0) resolve(false);
+          });
+        });
+      });
+    }
 
     if (!saved) {
       setLoading(false);
