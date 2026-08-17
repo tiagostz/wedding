@@ -652,6 +652,26 @@ a {
   letter-spacing: 2px;
 }
 
+.back-to-top {
+  width: 42px;
+  height: 42px;
+  display: inline-grid;
+  place-items: center;
+  margin-top: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 22px;
+  line-height: 1;
+  transition: 0.25s ease;
+}
+
+.back-to-top:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-3px);
+}
+
 @media (max-width: 800px) {
   .container {
     width: min(100% - 32px, 1120px);

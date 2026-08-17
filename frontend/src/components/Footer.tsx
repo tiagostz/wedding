@@ -11,6 +11,9 @@ export function Footer() {
       <div className="footer-brand">
         T <span>&amp;</span> T
       </div>
+      <a className="back-to-top" href="#inicio" aria-label="Voltar ao início da página">
+        ↑
+      </a>
     </footer>
   );
 }
