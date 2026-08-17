@@ -25,42 +25,46 @@ export function Gifts() {
   const [selectedGift, setSelectedGift] = useState<{ title: string; price: string } | null>(null);
 
   return (
-    <section id="presentes" className="max-w-[900px] mx-auto py-24 px-6 text-center">
-      <p className="text-[12px] uppercase tracking-[0.3em] text-[#8A9A80] mb-3 font-medium">
-        Lista de presentes
-      </p>
-      <h2 className="font-display text-3xl sm:text-[38px] font-medium text-[#2E2A26] mb-4">
-        Se quiser nos presentear
-      </h2>
-      <p className="max-w-[520px] mx-auto mb-10 text-[#2E2A26]/75 text-[15px] leading-[1.6] font-light">
-        Sua presença já é o maior presente. Mas se quiser nos ajudar a começar essa nova fase, deixamos algumas sugestões.
-      </p>
+    <section id="presentes" className="preview-section gifts-section">
+      <div className="container">
+      <div className="section-head">
+        <p className="eyebrow">Lista de presentes</p>
+        <h2>Se quiser nos presentear</h2>
+        <p>
+          Sua presença já é o maior presente. Mas, se quiser nos ajudar a começar essa nova fase, deixamos algumas sugestões.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-left">
+      <div className="gift-grid">
         {GIFTS.map((gift) => (
           <div
             key={gift.id}
-            className="bg-white border border-[#8A9A80]/25 rounded-[14px] overflow-hidden flex flex-col justify-between"
+            className="gift-card"
           >
-            <div className="h-[120px] bg-[#EDE6D8] overflow-hidden">
-              <img src={gift.image} alt={gift.title} className="w-full h-full object-cover" />
+            <div
+              className="gift-image"
+              style={{ backgroundImage: `url('${gift.image}')` }}
+              role="img"
+              aria-label={gift.title}
+            >
             </div>
-            <div className="p-[18px]">
-              <h4 className="font-display text-[18px] font-medium text-[#2E2A26] mb-1">
+            <div className="gift-body">
+              <h3>
                 {gift.title}
-              </h4>
-              <p className="text-[13px] text-[#8A9A80] mb-3 font-medium">
+              </h3>
+              <p className="gift-price">
                 {gift.price}
               </p>
               <button
                 onClick={() => setSelectedGift(gift)}
-                className="w-full py-[10px] border-none rounded-full bg-[#2E2A26] text-[#F7F4EE] text-[12px] uppercase tracking-[0.08em] cursor-pointer hover:bg-[#8A9A80] transition-colors"
+                className="preview-button"
               >
                 Presentear
               </button>
             </div>
           </div>
         ))}
+      </div>
       </div>
 
       {/* Gift Modal */}

@@ -143,40 +143,37 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
   };
 
   return (
-    <section id="rsvp" className="max-w-[900px] mx-auto py-24 px-6 text-center">
-      <p className="text-[12px] uppercase tracking-[0.3em] text-[#8A9A80] mb-3 font-medium">
-        Confirmação de presença
-      </p>
-      <h2 className="font-display text-3xl sm:text-[38px] font-medium text-[#2E2A26] mb-4">
-        Você vai estar com a gente?
-      </h2>
-      <p className="max-w-[520px] mx-auto mb-10 text-[#2E2A26]/75 text-[15px] leading-[1.6] font-light">
-        Preencha o formulário abaixo até 30 dias antes da data.
-      </p>
+    <section id="presenca" className="preview-section rsvp-section">
+      <div className="container rsvp-wrap">
+      <div className="section-head">
+        <p className="eyebrow">Confirmação de presença</p>
+        <h2>Você vai estar com a gente?</h2>
+        <p>Preencha o formulário abaixo até 30 dias antes da data.</p>
+      </div>
 
       {submitted ? (
-        <div className="max-w-[480px] mx-auto bg-white p-8 rounded-2xl border border-[#8A9A80]/40 shadow-sm text-center">
+        <div className="rsvp-success">
           {status === "CONFIRMED" ? (
             <>
-              <div className="w-12 h-12 rounded-full bg-[#8A9A80]/20 text-[#8A9A80] flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+              <div className="rsvp-success-icon">
                 ✓
               </div>
-              <h3 className="font-display text-2xl text-[#2E2A26] font-medium mb-2">
+              <h3>
                 Confirmação Recebida!
               </h3>
-              <p className="text-sm text-[#2E2A26]/80 font-light leading-relaxed">
+              <p>
                 Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
               </p>
             </>
           ) : (
             <>
-              <div className="w-12 h-12 rounded-full bg-[#C9A96E]/20 text-[#C9A96E] flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+              <div className="rsvp-success-icon">
                 ♥
               </div>
-              <h3 className="font-display text-2xl text-[#2E2A26] font-medium mb-2">
+              <h3>
                 Resposta Registrada
               </h3>
-              <p className="text-sm text-[#2E2A26]/80 font-light leading-relaxed">
+              <p>
                 Uma pena você não poder ir, {name}, mas agradecemos imensamente por nos avisar! Sentiremos sua falta nesse dia tão especial.
               </p>
             </>
@@ -192,21 +189,21 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               setNotes("");
               setError("");
             }}
-            className="mt-6 text-xs uppercase tracking-wider text-[#8A9A80] border-b border-[#8A9A80] pb-0.5 cursor-pointer hover:text-[#2E2A26]"
+            className="text-link-button"
           >
             Enviar outra resposta
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="max-w-[480px] mx-auto text-left flex flex-col gap-[14px]">
+        <form onSubmit={handleSubmit} className="rsvp-form">
           {error && (
-            <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+            <p role="alert" className="form-alert">
               {error}
             </p>
           )}
 
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+          <div className="rsvp-field">
+            <label>
               Nome completo *
             </label>
             <input
@@ -215,12 +212,12 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               required
               value={name}
               onChange={handleNameChange}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+              className=""
             />
           </div>
 
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+          <div className="rsvp-field">
+            <label>
               Telefone / WhatsApp *
             </label>
             <input
@@ -230,18 +227,18 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               maxLength={15}
               value={phone}
               onChange={handlePhoneChange}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+              className=""
             />
           </div>
 
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+          <div className="rsvp-field">
+            <label>
               Presença *
             </label>
             <select
               value={status}
               onChange={handleStatusChange}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+              className=""
             >
               <option value="CONFIRMED">Sim, estarei presente</option>
               <option value="DECLINED">Não poderei comparecer</option>
@@ -250,8 +247,8 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
 
           {status === "CONFIRMED" && (
             <>
-              <div>
-                <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+              <div className="rsvp-field">
+                <label>
                   Quantidade de acompanhantes
                 </label>
                 <input
@@ -272,16 +269,16 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
                       )
                     );
                   }}
-                  className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+                  className=""
                 />
               </div>
 
               {typeof companions === "number" && companions > 0 && (
-                <div className="rounded-xl border border-[#8A9A80]/25 bg-[#F7F4EE]/60 p-4">
-                  <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 font-medium">
+                <div className="companion-fields">
+                  <p className="companion-fields-title">
                     Nome dos acompanhantes
                   </p>
-                  <div className="flex flex-col gap-3">
+                  <div className="companion-fields-list">
                     {companionNames.map((companionName, index) => (
                       <input
                         key={index}
@@ -297,7 +294,7 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
                             )
                           );
                         }}
-                        className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+                        className=""
                       />
                     ))}
                   </div>
@@ -306,8 +303,8 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
             </>
           )}
 
-          <div>
-            <label className="text-[12px] uppercase tracking-[0.08em] text-[#2E2A26]/60 mb-[4px] block font-medium">
+          <div className="rsvp-field">
+            <label>
               Observações
             </label>
             <textarea
@@ -315,19 +312,20 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
               placeholder="Alguma restrição alimentar, alergias ou mensagem aos noivos..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full p-[12px_14px] rounded-[8px] border border-[#8A9A80]/35 font-body text-[14px] bg-white outline-none focus:border-[#8A9A80]"
+              className=""
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 bg-[#2E2A26] text-[#F7F4EE] p-[14px_34px] rounded-full text-[13px] uppercase tracking-[0.12em] transition-colors hover:bg-[#8A9A80] font-normal cursor-pointer disabled:opacity-50"
+            className="preview-button"
           >
             {loading ? "Enviando..." : "Enviar confirmação"}
           </button>
         </form>
       )}
+      </div>
     </section>
   );
 }

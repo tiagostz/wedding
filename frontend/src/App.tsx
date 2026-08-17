@@ -67,7 +67,7 @@ export default function App() {
   }
 
   return (
-    <div className="overflow-x-hidden min-h-screen bg-[#F7F4EE]">
+    <div className="app-shell">
       <Navbar />
       <Hero wedding={wedding} />
       <Story storyText={wedding.storyText} />

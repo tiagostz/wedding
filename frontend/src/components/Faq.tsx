@@ -28,31 +28,30 @@ export function Faq() {
   ];
 
   return (
-    <section id="faq" className="max-w-[900px] mx-auto py-24 px-6 text-center">
-      <p className="text-[12px] uppercase tracking-[0.3em] text-[#8A9A80] mb-3 font-medium">
-        Perguntas frequentes
-      </p>
-      <h2 className="font-display text-3xl sm:text-[38px] font-medium text-[#2E2A26] mb-8">
-        Tudo o que você precisa saber
-      </h2>
+    <section id="faq" className="preview-section faq-section">
+      <div className="container">
+      <div className="section-head">
+        <p className="eyebrow">Perguntas frequentes</p>
+        <h2>Tudo o que você precisa saber</h2>
+      </div>
 
-      <div className="max-w-[600px] mx-auto text-left">
+      <div className="faq-list">
         {faqItems.map((item, idx) => (
           <details
             key={idx}
             open={item.open}
-            className="border-b border-[#8A9A80]/25 group"
+            className="faq-item"
           >
-            <summary className="p-[18px_4px] cursor-pointer text-[15px] list-none flex justify-between items-center font-medium text-[#2E2A26] select-none">
+            <summary>
               <span>{item.q}</span>
-              <span className="text-[#C9A96E] text-[18px] group-open:hidden">+</span>
-              <span className="text-[#C9A96E] text-[18px] hidden group-open:inline">−</span>
+              <span className="faq-plus">+</span>
             </summary>
-            <p className="m-0 pb-[18px] px-[4px] text-[14px] text-[#2E2A26]/75 font-light leading-relaxed">
+            <p className="faq-answer">
               {item.a}
             </p>
           </details>
         ))}
+      </div>
       </div>
     </section>
   );

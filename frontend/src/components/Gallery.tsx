@@ -1,42 +1,47 @@
 const PHOTOS = [
-  { label: "Foto 1", src: "/images/wedding-hero.png" },
-  { label: "Foto 2", src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" },
-  { label: "Foto 3", src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" },
-  { label: "Foto 4", src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" },
-  { label: "Foto 5", src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop" },
-  { label: "Foto 6", src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop" },
+  {
+    label: "Momentos do casal",
+    src: "/images/wedding-hero.png",
+    className: "large",
+  },
+  {
+    label: "Momento especial",
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=900&auto=format&fit=crop",
+    className: "",
+  },
+  {
+    label: "Celebração",
+    src: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=900&auto=format&fit=crop",
+    className: "",
+  },
+  {
+    label: "Um dia para lembrar",
+    src: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?q=80&w=1200&auto=format&fit=crop",
+    className: "wide",
+  },
 ];
 
 export function Gallery() {
   return (
-    <section id="fotos" className="max-w-[900px] mx-auto py-24 px-6 text-center">
-      <p className="text-[12px] uppercase tracking-[0.3em] text-[#8A9A80] mb-3 font-medium">
-        Galeria
-      </p>
-      <h2 className="font-display text-3xl sm:text-[38px] font-medium text-[#2E2A26] mb-4">
-        Alguns dos nossos momentos
-      </h2>
-      <p className="max-w-[520px] mx-auto mb-10 text-[#2E2A26]/75 text-[15px] leading-[1.6] font-light">
-        Registros dos momentos mais marcantes da nossa história.
-      </p>
+    <section id="fotos" className="preview-section gallery-section">
+      <div className="container">
+        <div className="section-head">
+          <p className="eyebrow">Memórias</p>
+          <h2>Alguns dos nossos momentos</h2>
+          <p>Um espaço mais visual para contar a nossa história sem deixar a página pesada.</p>
+        </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {PHOTOS.map((item, idx) => (
-          <div
-            key={idx}
-            className="aspect-square rounded-[10px] overflow-hidden bg-[#EDE6D8] relative group border border-[#EDE6D8]"
-          >
-            <img
-              src={item.src}
-              alt={item.label}
-              onError={(event) => {
-                event.currentTarget.onerror = null;
-                event.currentTarget.src = "/images/wedding-hero.png";
-              }}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        <div className="gallery-grid">
+          {PHOTOS.map((photo) => (
+            <div
+              key={photo.label}
+              className={`gallery-tile ${photo.className}`}
+              style={{ backgroundImage: `url('${photo.src}')` }}
+              role="img"
+              aria-label={photo.label}
             />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
