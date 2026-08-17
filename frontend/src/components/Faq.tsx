@@ -21,7 +21,7 @@ export function Faq() {
     <section id="faq" className="preview-section faq-section">
       <div className="container">
         <div className="section-head">
-          <p className="eyebrow">Perguntas frequentes</p>
+          <p className="eyebrow">Perguntas</p>
           <h2>Tudo o que você precisa saber</h2>
         </div>
 

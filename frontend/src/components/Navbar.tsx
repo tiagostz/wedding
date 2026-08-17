@@ -4,7 +4,7 @@ const LINKS = [
   { href: "#evento", label: "Evento" },
   { href: "#presentes", label: "Presentes" },
   { href: "#presenca", label: "Presença" },
-  { href: "#faq", label: "FAQ" },
+  { href: "#faq", label: "Perguntas" },
 ];
 
 export function Navbar() {
