@@ -629,12 +629,12 @@ a {
   font-size: 13px;
 }
 
-.whatsapp-reminder-button {
+.calendar-button {
   display: inline-block;
   margin-top: 20px;
   padding: 12px 18px;
   border-radius: 999px;
-  background: #25d366;
+  background: var(--gold);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -643,11 +643,11 @@ a {
   text-transform: uppercase;
 }
 
-.whatsapp-reminder-button:hover {
-  background: #1fb957;
+.calendar-button:hover {
+  background: #9c7d49;
 }
 
-.whatsapp-reminder-help {
+.calendar-help {
   margin: 10px 0 0;
   font-size: 11px !important;
 }

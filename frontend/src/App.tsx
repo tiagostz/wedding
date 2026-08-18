@@ -70,7 +70,12 @@ export default function App() {
       <Hero wedding={wedding} />
       <EventDetails />
       <Gifts />
-      <RsvpForm weddingSlug={wedding.slug} />
+      <RsvpForm
+        weddingSlug={wedding.slug}
+        partner1Name={wedding.partner1Name}
+        partner2Name={wedding.partner2Name}
+        weddingDate={wedding.weddingDate}
+      />
       <Faq />
       <Footer />
     </div>

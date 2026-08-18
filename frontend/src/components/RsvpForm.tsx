@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { api, API_URL } from "../services/api";
 
 interface RsvpFormProps {
   weddingSlug: string;
+  partner1Name: string;
+  partner2Name: string;
+  weddingDate: string;
 }
+
+type RsvpStatus = "CONFIRMED" | "DECLINED";
 
 // URL do Webhook do Google Sheets (App Script)
 const GOOGLE_SHEETS_URL =
   import.meta.env.VITE_SHEETS_WEBHOOK_URL ||
   "https://script.google.com/macros/s/AKfycbzWvMm9Dmr7ht6G6fAEXGyxKCAGVDqr167GdPUtoc4xJgWxBPm0yks2WNi7uQPVMmEJ/exec";
 
-export function RsvpForm({ weddingSlug }: RsvpFormProps) {
+function formatCalendarDate(date: Date) {
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}00`;
+}
+
+export function RsvpForm({
+  weddingSlug,
+  partner1Name,
+  partner2Name,
+  weddingDate,
+}: RsvpFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [status, setStatus] = useState("CONFIRMED");
+  const [status, setStatus] = useState<RsvpStatus>("CONFIRMED");
   const [companions, setCompanions] = useState<number | "">("");
   const [companionNames, setCompanionNames] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
@@ -22,30 +36,13 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
-    // Permite apenas letras (incluindo acentos e ç) e espaços
-    const lettersOnly = rawValue.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const lettersOnly = event.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
     setName(lettersOnly);
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
-    const numbersOnly = rawValue.replace(/\D/g, "").slice(0, 11);
-
-    let formatted = numbersOnly;
-    if (numbersOnly.length > 2) {
-      formatted = `(${numbersOnly.slice(0, 2)}) ${numbersOnly.slice(2)}`;
-    }
-    if (numbersOnly.length > 7) {
-      formatted = `(${numbersOnly.slice(0, 2)}) ${numbersOnly.slice(2, 7)}-${numbersOnly.slice(7, 11)}`;
-    }
-
-    setPhone(formatted);
-  };
-
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const nextStatus = e.target.value;
+  const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const nextStatus = event.target.value as RsvpStatus;
     setStatus(nextStatus);
 
     if (nextStatus === "DECLINED") {
@@ -54,8 +51,8 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
     setError("");
 
@@ -86,7 +83,6 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       weddingSlug,
       fullName: name.trim(),
       email: email.trim() || undefined,
-      phone: phone.trim() || undefined,
       status,
       companionsQty,
       companionNames: companionNamesValue,
@@ -104,7 +100,6 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
 
     const requests: Promise<boolean>[] = [];
 
-    // 1. Enviar para a planilha do Google Sheets
     if (GOOGLE_SHEETS_URL) {
       const sheetsController = new AbortController();
       const sheetsTimeout = window.setTimeout(() => sheetsController.abort(), 8000);
@@ -123,7 +118,6 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       );
     }
 
-    // 2. Enviar para a API Backend quando ela estiver configurada
     if (API_URL) {
       requests.push(
         api
@@ -133,8 +127,6 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       );
     }
 
-    // Considera a confirmação concluída assim que um dos destinos aceitar o envio.
-    // O outro destino continua processando em segundo plano, sem prender a tela.
     let saved = false;
     if (requests.length > 0) {
       saved = await new Promise<boolean>((resolve) => {
@@ -160,235 +152,211 @@ export function RsvpForm({ weddingSlug }: RsvpFormProps) {
       return;
     }
 
-    // 3. Só confirmar na tela depois que pelo menos um destino aceitou o envio
     setLoading(false);
     setSubmitted(true);
   };
 
-  const whatsappReminderUrl = (() => {
+  const googleCalendarUrl = (() => {
     if (status !== "CONFIRMED") return "";
 
-    const whatsappNumber = phone.replace(/\D/g, "");
-    const numberWithCountryCode = whatsappNumber.startsWith("55")
-      ? whatsappNumber
-      : `55${whatsappNumber}`;
+    const startDate = new Date(weddingDate);
+    if (Number.isNaN(startDate.getTime())) return "";
+
+    const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
     const names = companionNames.filter((companionName) => companionName.trim());
-    const companionsText = names.length
-      ? names.join(", ")
-      : "Nenhum acompanhante";
-    const message = [
-      `Oi! Minha presença no casamento de Tiago e Thayanne está confirmada 💍`,
+    const companionsText = names.length ? names.join(", ") : "Nenhum acompanhante";
+    const details = [
+      `Presença confirmada de ${name.trim()}.`,
       "",
-      "📅 Data: 03 de outubro de 2026, às 11h",
-      "📍 Cerimônia: Paróquia Sant'Ana",
+      "Cerimônia: Paróquia Sant'Ana",
       "Rua Mato Grosso, 305 — Vila Santana, Valinhos — SP",
       "",
-      "🎉 Celebração: Macarronada Italiana",
+      "Celebração: Macarronada Italiana",
       "Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP",
       "",
-      `👥 Acompanhantes: ${companionsText}`,
+      `Acompanhantes: ${companionsText}`,
     ].join("\n");
 
-    return `https://wa.me/${numberWithCountryCode}?text=${encodeURIComponent(message)}`;
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: `Casamento de ${partner1Name} e ${partner2Name}`,
+      dates: `${formatCalendarDate(startDate)}/${formatCalendarDate(endDate)}`,
+      details,
+      location: "Paróquia Sant'Ana, Rua Mato Grosso, 305, Valinhos - SP",
+      ctz: "America/Sao_Paulo",
+    });
+
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
   })();
 
   return (
     <section id="presenca" className="preview-section rsvp-section">
       <div className="container rsvp-wrap">
-      <div className="section-head">
-        <p className="eyebrow">Confirmação de presença</p>
-        <h2>Você estará conosco?</h2>
-        <p>Preencha o formulário abaixo até dia 21/08/2026 (Sexta-feira)</p>
-      </div>
-
-      {submitted ? (
-        <div className="rsvp-success">
-          {status === "CONFIRMED" ? (
-            <>
-              <div className="rsvp-success-icon">
-                ✓
-              </div>
-              <h3>
-                Confirmação Recebida!
-              </h3>
-              <p>
-                Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
-              </p>
-              <a
-                href={whatsappReminderUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whatsapp-reminder-button"
-              >
-                Enviar lembrete pelo WhatsApp
-              </a>
-              <p className="whatsapp-reminder-help">
-                O WhatsApp abrirá com a mensagem pronta. Basta tocar em enviar.
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="rsvp-success-icon">
-                ♥
-              </div>
-              <h3>
-                Resposta Registrada
-              </h3>
-              <p>
-                Uma pena você não poder ir, {name}, mas agradecemos imensamente por nos avisar! Sentiremos sua falta nesse dia tão especial.
-              </p>
-            </>
-          )}
-          <button
-            onClick={() => {
-              setSubmitted(false);
-              setName("");
-              setEmail("");
-              setPhone("");
-              setCompanions("");
-              setCompanionNames([]);
-              setNotes("");
-              setError("");
-            }}
-            className="text-link-button"
-          >
-            Enviar outra resposta
-          </button>
+        <div className="section-head">
+          <p className="eyebrow">Confirmação de presença</p>
+          <h2>Você estará conosco?</h2>
+          <p>Preencha o formulário abaixo até dia 21/08/2026 (Sexta-feira)</p>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="rsvp-form">
-          {error && (
-            <p role="alert" className="form-alert">
-              {error}
-            </p>
-          )}
 
-          <div className="rsvp-field">
-            <label>
-              Nome completo *
-            </label>
-            <input
-              type="text"
-              placeholder="Seu nome completo"
-              required
-              value={name}
-              onChange={handleNameChange}
-              className=""
-            />
-          </div>
-
-          <div className="rsvp-field">
-            <label>
-              Telefone / WhatsApp *
-            </label>
-            <input
-              type="tel"
-              placeholder="(19) 99609-0920"
-              required
-              maxLength={15}
-              value={phone}
-              onChange={handlePhoneChange}
-              className=""
-            />
-          </div>
-
-          <div className="rsvp-field">
-            <label>
-              Presença *
-            </label>
-            <select
-              value={status}
-              onChange={handleStatusChange}
-              className=""
-            >
-              <option value="CONFIRMED">Sim, estarei presente</option>
-              <option value="DECLINED">Não poderei comparecer</option>
-            </select>
-          </div>
-
-          {status === "CONFIRMED" && (
-            <>
-              <div className="rsvp-field">
-                <label>
-                  Quantidade de acompanhantes
-                </label>
-                <input
-                  type="text"
-                  placeholder="Ex.: 2"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={2}
-                  value={companions}
-                  onChange={(e) => {
-                    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 2);
-                    const quantity = digitsOnly === "" ? "" : Math.min(Number(digitsOnly), 10);
-                    setCompanions(quantity);
-                    setCompanionNames((currentNames) =>
-                      Array.from(
-                        { length: quantity === "" ? 0 : quantity },
-                        (_, index) => currentNames[index] || ""
-                      )
-                    );
-                  }}
-                  className=""
-                />
-                <p className="field-help">
-                  Em caso de dúvida sobre acompanhantes, consulte as <a href="#perguntas" className="field-help-link">perguntas abaixo</a>. Lá explicamos quais acompanhantes podem ser incluídos.
+        {submitted ? (
+          <div className="rsvp-success">
+            {status === "CONFIRMED" ? (
+              <>
+                <div className="rsvp-success-icon">✓</div>
+                <h3>Confirmação recebida!</h3>
+                <p>
+                  Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
                 </p>
-              </div>
-
-              {typeof companions === "number" && companions > 0 && (
-                <div className="companion-fields">
-                  <p className="companion-fields-title">
-                    Nome dos acompanhantes
-                  </p>
-                  <div className="companion-fields-list">
-                    {companionNames.map((companionName, index) => (
-                      <input
-                        key={index}
-                        type="text"
-                        required
-                        placeholder={`Nome do acompanhante ${index + 1}`}
-                        value={companionName}
-                        onChange={(e) => {
-                          const sanitizedName = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
-                          setCompanionNames((currentNames) =>
-                            currentNames.map((currentName, currentIndex) =>
-                              currentIndex === index ? sanitizedName : currentName
-                            )
-                          );
-                        }}
-                        className=""
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-
-          <div className="rsvp-field">
-            <label>
-              Observações
-            </label>
-            <textarea
-              rows={3}
-              placeholder="Alguma restrição alimentar, alergias ou mensagem aos noivos..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className=""
-            />
+                {googleCalendarUrl && (
+                  <>
+                    <a
+                      href={googleCalendarUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="calendar-button"
+                    >
+                      Adicionar ao Google Agenda
+                    </a>
+                    <p className="calendar-help">
+                      O evento abrirá preenchido. Basta salvá-lo na sua agenda.
+                    </p>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="rsvp-success-icon">♥</div>
+                <h3>Resposta registrada</h3>
+                <p>
+                  Uma pena você não poder ir, {name}, mas agradecemos imensamente por nos avisar. Sentiremos sua falta nesse dia tão especial.
+                </p>
+              </>
+            )}
+            <button
+              onClick={() => {
+                setSubmitted(false);
+                setName("");
+                setEmail("");
+                setCompanions("");
+                setCompanionNames([]);
+                setNotes("");
+                setError("");
+              }}
+              className="text-link-button"
+            >
+              Enviar outra resposta
+            </button>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="rsvp-form">
+            {error && (
+              <p role="alert" className="form-alert">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="preview-button"
-          >
-            {loading ? "Enviando..." : "Enviar confirmação"}
-          </button>
-        </form>
-      )}
+            <div className="rsvp-field">
+              <label>Nome completo *</label>
+              <input
+                type="text"
+                placeholder="Seu nome completo"
+                required
+                value={name}
+                onChange={handleNameChange}
+              />
+            </div>
+
+            <div className="rsvp-field">
+              <label>E-mail (opcional)</label>
+              <input
+                type="email"
+                placeholder="voce@email.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <p className="field-help">
+                Usaremos este e-mail apenas para manter a confirmação registrada.
+              </p>
+            </div>
+
+            <div className="rsvp-field">
+              <label>Presença *</label>
+              <select value={status} onChange={handleStatusChange}>
+                <option value="CONFIRMED">Sim, estarei presente</option>
+                <option value="DECLINED">Não poderei comparecer</option>
+              </select>
+            </div>
+
+            {status === "CONFIRMED" && (
+              <>
+                <div className="rsvp-field">
+                  <label>Quantidade de acompanhantes</label>
+                  <input
+                    type="text"
+                    placeholder="Ex.: 2"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={2}
+                    value={companions}
+                    onChange={(event) => {
+                      const digitsOnly = event.target.value.replace(/\D/g, "").slice(0, 2);
+                      const quantity = digitsOnly === "" ? "" : Math.min(Number(digitsOnly), 10);
+                      setCompanions(quantity);
+                      setCompanionNames((currentNames) =>
+                        Array.from(
+                          { length: quantity === "" ? 0 : quantity },
+                          (_, index) => currentNames[index] || ""
+                        )
+                      );
+                    }}
+                  />
+                  <p className="field-help">
+                    Em caso de dúvida sobre acompanhantes, consulte as <a href="#perguntas" className="field-help-link">perguntas abaixo</a>.
+                  </p>
+                </div>
+
+                {typeof companions === "number" && companions > 0 && (
+                  <div className="companion-fields">
+                    <p className="companion-fields-title">Nome dos acompanhantes</p>
+                    <div className="companion-fields-list">
+                      {companionNames.map((companionName, index) => (
+                        <input
+                          key={index}
+                          type="text"
+                          required
+                          placeholder={`Nome do acompanhante ${index + 1}`}
+                          value={companionName}
+                          onChange={(event) => {
+                            const sanitizedName = event.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+                            setCompanionNames((currentNames) =>
+                              currentNames.map((currentName, currentIndex) =>
+                                currentIndex === index ? sanitizedName : currentName
+                              )
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            <div className="rsvp-field">
+              <label>Observações</label>
+              <textarea
+                rows={3}
+                placeholder="Alguma restrição alimentar, alergias ou mensagem aos noivos..."
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+              />
+            </div>
+
+            <button type="submit" disabled={loading} className="preview-button">
+              {loading ? "Enviando..." : "Enviar confirmação"}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );
