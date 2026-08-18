@@ -11,7 +11,9 @@ O formulário já envia o campo `email` para o webhook do Google Sheets. Para qu
 5. Em **Implantar → Gerenciar implantações**, edite a implantação do tipo **Aplicativo da Web**.
 6. Execute como você e permita acesso para qualquer pessoa com o link.
 7. Mantenha a mesma URL do webhook configurada no frontend.
-8. Na primeira confirmação com e-mail, o Google solicitará autorização para enviar mensagens.
+8. No editor, selecione a função `authorizeEmailAccess` e clique em **Executar**.
+9. Aceite as permissões solicitadas pelo Google.
+10. Volte em **Implantar → Gerenciar implantações**, edite a implantação do aplicativo da Web e publique uma nova versão.
 
 O script continua registrando as respostas na aba `Respostas` (ou na primeira aba existente) e envia e-mail somente quando o campo de e-mail estiver preenchido.
 

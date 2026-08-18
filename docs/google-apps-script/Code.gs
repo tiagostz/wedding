@@ -4,6 +4,12 @@ const WEDDING_DATE = "03 de outubro de 2026, às 11h";
 const CEREMONY_LOCATION = "Paróquia Sant'Ana, Rua Mato Grosso, 305 — Vila Santana, Valinhos — SP";
 const RECEPTION_LOCATION = "Macarronada Italiana, Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP";
 
+// Execute esta função manualmente uma vez no editor para autorizar o envio de e-mails.
+function authorizeEmailAccess() {
+  const remaining = MailApp.getRemainingDailyQuota();
+  Logger.log("Destinatários de e-mail restantes hoje: " + remaining);
+}
+
 function doPost(event) {
   const data = JSON.parse(event.postData.contents || "{}");
   const sheet = getResponseSheet();
