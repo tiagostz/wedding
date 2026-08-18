@@ -63,7 +63,7 @@ function sendConfirmationEmail(data) {
     ? "Presença confirmada — " + COUPLE_NAME
     : "Resposta registrada — " + COUPLE_NAME;
 
-  const textBody = status
+  let textBody = status
     ? [
         "Olá, " + name + "!",
         "",
@@ -86,7 +86,7 @@ function sendConfirmationEmail(data) {
         COUPLE_NAME,
       ].join("\n");
 
-  const htmlBody = status
+  let htmlBody = status
     ? [
         "<p>Olá, " + escapeHtml(name) + "!</p>",
         "<p>Sua presença no casamento de <strong>" + COUPLE_NAME + "</strong> foi confirmada.</p>",
@@ -102,6 +102,11 @@ function sendConfirmationEmail(data) {
         "<p>Sua resposta foi registrada. Agradecemos por nos avisar.</p>",
         "<p>Com carinho,<br>" + COUPLE_NAME + "</p>",
       ].join("");
+
+  if (status && data.notes) {
+    textBody += "\n\nObservações: " + data.notes;
+    htmlBody += "<p><strong>Observações:</strong> " + escapeHtml(data.notes) + "</p>";
+  }
 
   MailApp.sendEmail({
     to: data.email,

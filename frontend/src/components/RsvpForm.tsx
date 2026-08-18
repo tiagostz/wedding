@@ -189,6 +189,21 @@ export function RsvpForm({
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   })();
 
+  const confirmationDate = (() => {
+    const date = new Date(weddingDate);
+    if (Number.isNaN(date.getTime())) return weddingDate;
+
+    return `${date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })} às ${date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+  })();
+  const confirmationCompanions = companionNames.filter((companionName) => companionName.trim());
+
   return (
     <section id="presenca" className="preview-section rsvp-section">
       <div className="container rsvp-wrap">
@@ -212,6 +227,36 @@ export function RsvpForm({
                     A confirmação também será enviada para {email}. Verifique a caixa de spam caso não encontre.
                   </p>
                 )}
+                <div className="confirmation-details" aria-label="Resumo da confirmação">
+                  <div className="confirmation-detail-row">
+                    <span>Data</span>
+                    <strong>{confirmationDate}</strong>
+                  </div>
+                  <div className="confirmation-detail-row">
+                    <span>Cerimônia</span>
+                    <strong>Paróquia Sant'Ana</strong>
+                    <small>Rua Mato Grosso, 305 — Vila Santana, Valinhos — SP</small>
+                  </div>
+                  <div className="confirmation-detail-row">
+                    <span>Celebração</span>
+                    <strong>Macarronada Italiana</strong>
+                    <small>Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP</small>
+                  </div>
+                  <div className="confirmation-detail-row">
+                    <span>Acompanhantes</span>
+                    <strong>
+                      {confirmationCompanions.length
+                        ? confirmationCompanions.join(", ")
+                        : "Nenhum acompanhante"}
+                    </strong>
+                  </div>
+                  {notes.trim() && (
+                    <div className="confirmation-detail-row">
+                      <span>Observações</span>
+                      <strong>{notes.trim()}</strong>
+                    </div>
+                  )}
+                </div>
                 {googleCalendarUrl && (
                   <>
                     <a
