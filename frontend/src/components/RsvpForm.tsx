@@ -207,6 +207,11 @@ export function RsvpForm({
                 <p>
                   Obrigado por confirmar sua presença, {name}! Mal podemos esperar para celebrar esse dia tão especial juntos.
                 </p>
+                {email && (
+                  <p className="email-confirmation-help">
+                    A confirmação também será enviada para {email}. Verifique a caixa de spam caso não encontre.
+                  </p>
+                )}
                 {googleCalendarUrl && (
                   <>
                     <a
