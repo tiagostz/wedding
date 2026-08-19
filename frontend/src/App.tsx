@@ -7,6 +7,7 @@ import { Gifts } from "./components/Gifts";
 import { RsvpForm } from "./components/RsvpForm";
 import { Faq } from "./components/Faq";
 import { Footer } from "./components/Footer";
+import { PhotoCarousel } from "./components/PhotoCarousel";
 import { Wedding } from "./types/wedding";
 import { API_URL, fetchWeddingBySlug } from "./services/api";
 
@@ -69,6 +70,7 @@ export default function App() {
       <Navbar />
       <Hero wedding={wedding} />
       <EventDetails />
+      <PhotoCarousel />
       <Gifts />
       <RsvpForm
         weddingSlug={wedding.slug}

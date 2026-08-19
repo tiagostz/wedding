@@ -323,6 +323,125 @@ a {
   background: var(--ivory);
 }
 
+.moments-section {
+  padding: 120px 20px;
+  background: var(--ivory);
+}
+
+.moments-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.moments-wrap h2 {
+  margin: 0 0 48px;
+  font: 500 clamp(38px, 4.4vw, 58px) / 0.95 "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -0.5px;
+}
+
+.photo-carousel {
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--sand);
+}
+
+.photo-frame::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, var(--ivory) 0%, transparent 35%),
+    radial-gradient(circle at top right, var(--ivory) 0%, transparent 35%),
+    radial-gradient(circle at bottom left, var(--ivory) 0%, transparent 35%),
+    radial-gradient(circle at bottom right, var(--ivory) 0%, transparent 35%);
+  content: "";
+}
+
+.photo-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.photo-slide.active {
+  opacity: 1;
+}
+
+.photo-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-nav {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  display: flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.carousel-nav:hover {
+  background: var(--white);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-prev {
+  left: 14px;
+}
+
+.carousel-next {
+  right: 14px;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sand-dark);
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.carousel-dot.active {
+  background: var(--gold);
+  transform: scale(1.25);
+}
+
 .event-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
