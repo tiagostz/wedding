@@ -46,6 +46,7 @@ export function RsvpForm({
     setStatus(nextStatus);
 
     if (nextStatus === "DECLINED") {
+      setEmail("");
       setCompanions("");
       setCompanionNames([]);
     }
@@ -317,19 +318,6 @@ export function RsvpForm({
             </div>
 
             <div className="rsvp-field">
-              <label>E-mail (opcional)</label>
-              <input
-                type="email"
-                placeholder="voce@email.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <p className="field-help">
-                Usaremos este e-mail apenas para manter a confirmação registrada.
-              </p>
-            </div>
-
-            <div className="rsvp-field">
               <label>Presença *</label>
               <select value={status} onChange={handleStatusChange}>
                 <option value="CONFIRMED">Sim, estarei presente</option>
@@ -339,6 +327,19 @@ export function RsvpForm({
 
             {status === "CONFIRMED" && (
               <>
+                <div className="rsvp-field">
+                  <label>E-mail (opcional)</label>
+                  <input
+                    type="email"
+                    placeholder="voce@email.com"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                  />
+                  <p className="field-help">
+                    Usaremos este e-mail apenas para manter a confirmação registrada.
+                  </p>
+                </div>
+
                 <div className="rsvp-field">
                   <label>Quantidade de acompanhantes</label>
                   <input
