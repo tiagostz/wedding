@@ -687,6 +687,7 @@ a {
 }
 
 .companion-fields {
+  margin-bottom: 28px;
   padding: 16px;
   border: 1px solid rgba(184, 154, 98, 0.25);
   border-radius: 14px;
@@ -880,6 +881,19 @@ a {
   color: var(--muted);
   font-size: 13px;
   white-space: pre-line;
+}
+
+.faq-answer p {
+  margin: 0 0 12px;
+}
+
+.faq-answer p:last-child {
+  margin-bottom: 0;
+}
+
+.faq-answer ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
 }
 
 .site-footer {

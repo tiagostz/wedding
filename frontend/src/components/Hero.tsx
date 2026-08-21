@@ -32,7 +32,7 @@ export function Hero({ wedding }: HeroProps) {
       </h1>
 
       <p className="hero-sub">
-        {wedding.tagline || "Vamos nos casar! Contamos com a sua presença para celebrar esse dia com a gente."}
+        {wedding.tagline || "Contamos com a sua presença para celebrar esse dia com a gente."}
       </p>
 
       <p className="hero-date">

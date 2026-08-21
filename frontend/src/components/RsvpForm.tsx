@@ -211,7 +211,7 @@ export function RsvpForm({
         <div className="section-head">
           <p className="eyebrow">Confirmação de presença</p>
           <h2>Você estará conosco?</h2>
-          <p>Preencha o formulário abaixo até dia 21/08/2026 (Sexta-feira)</p>
+          <p>Preencha o formulário abaixo até dia 25/08/2026 (Terça-feira)</p>
         </div>
 
         {submitted ? (
@@ -336,7 +336,7 @@ export function RsvpForm({
                     onChange={(event) => setEmail(event.target.value)}
                   />
                   <p className="field-help">
-                    Usaremos este e-mail apenas para manter a confirmação registrada.
+                    Informe seu e-mail caso queira receber uma cópia da sua confirmação de presença.
                   </p>
                 </div>
 

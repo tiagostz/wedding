@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { EventDetails } from "./components/EventDetails";
-import { Gifts } from "./components/Gifts";
 import { RsvpForm } from "./components/RsvpForm";
 import { Faq } from "./components/Faq";
 import { Footer } from "./components/Footer";
@@ -16,7 +15,7 @@ const WEDDING_DATA: Wedding = {
   slug: "tiago-e-thayanne",
   partner1Name: "Tiago",
   partner2Name: "Thayanne",
-  tagline: "Vamos nos casar! Contamos com a sua presença para celebrar esse dia especial com a gente.",
+  tagline: "Contamos com a sua presença para celebrar esse dia especial com a gente.",
   weddingDate: "2026-10-03T11:00:00",
   storyText: "Uma pequena linha do tempo com os momentos que nos trouxeram até aqui.",
   heroImageUrl: "/images/wedding-hero.png",
@@ -71,7 +70,6 @@ export default function App() {
       <Hero wedding={wedding} />
       <EventDetails />
       <PhotoCarousel />
-      <Gifts />
       <RsvpForm
         weddingSlug={wedding.slug}
         partner1Name={wedding.partner1Name}

@@ -1,18 +1,28 @@
+type FaqItem = {
+  q: string;
+  a?: string;
+  list?: string[];
+  outro?: string;
+  open: boolean;
+};
+
 export function Faq() {
-  const faqItems = [
+  const faqItems: FaqItem[] = [
     {
-      q: "Qual o traje?",
+      q: "Qual traje devo usar?",
       a: "Escolha o traje que fizer você se sentir bem. O mais importante é estar confortável para celebrar esse dia especial conosco.",
       open: true,
     },
     {
-      q: "Existe estacionamento?",
+      q: "Os locais possuem estacionamento?",
       a: "Paróquia Sant'Ana: não há estacionamento exclusivo. Caso considere estacionar na rua, informamos que o bairro é um lugar seguro, tranquilo e pouco movimentado.\n\nRestaurante Macarronada Italiana: o estabelecimento possui estacionamento exclusivo e gratuito.",
       open: false,
     },
     {
       q: "Posso levar acompanhante?",
-      a: "Sim! São considerados acompanhantes namorado(a), marido ou esposa e filhos(as). Pedimos, por gentileza, que o convite seja restrito a essas pessoas.\n\nAlém disso, é importante cadastrar seu acompanhante no formulário de confirmação de presença.",
+      a: "Sim! São considerados acompanhantes:",
+      list: ["Namorado(a)", "Marido", "Esposa", "Filhos(as)"],
+      outro: "Pedimos, por gentileza, que o convite seja restrito a essas pessoas.",
       open: false,
     },
   ];
@@ -32,7 +42,17 @@ export function Faq() {
                 <span>{item.q}</span>
                 <span className="faq-plus">+</span>
               </summary>
-              <p className="faq-answer">{item.a}</p>
+              <div className="faq-answer">
+                {item.a && <p>{item.a}</p>}
+                {item.list && (
+                  <ul>
+                    {item.list.map((entry) => (
+                      <li key={entry}>{entry}</li>
+                    ))}
+                  </ul>
+                )}
+                {item.outro && <p>{item.outro}</p>}
+              </div>
             </details>
           ))}
         </div>

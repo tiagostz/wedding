@@ -14,9 +14,11 @@ export function EventDetails() {
         <article className="event-card">
           <div className="event-icon">♡</div>
           <h3>
-            Cerimônia Religiosa
+            Cerimônia
           </h3>
-          <p><strong>03 de outubro de 2026 — 11h</strong>
+          <p><strong>03 de outubro de 2026</strong>
+          </p>
+          <p>Início da cerimônia às 11h — duração média de 40 minutos
           </p>
           <p><strong>Paróquia Sant'Ana</strong>
           </p>
@@ -47,6 +49,10 @@ export function EventDetails() {
           <h3>
             Celebração
           </h3>
+          <p><strong>03 de outubro de 2026</strong>
+          </p>
+          <p>Após a cerimônia
+          </p>
           <p><strong>Macarronada Italiana</strong>
           </p>
           <p>Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP
