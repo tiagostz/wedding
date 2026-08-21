@@ -63,6 +63,7 @@ export function EventDetails() {
             <li>Crianças de 06 a 11 anos: R$ 58,00</li>
             <li>Adultos: R$ 79,90</li>
           </ul>
+          <p><strong>Obs.:</strong> o valor não inclui bebida</p>
           <div className="event-links">
             <a
               href="https://www.google.com/maps/search/?api=1&query=Macarronada+Italiana%2C+Avenida+Marechal+Carmona%2C+738%2C+Campinas%2C+SP"

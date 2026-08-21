@@ -213,7 +213,7 @@ export function RsvpForm({
         <div className="section-head">
           <p className="eyebrow">Confirmação de presença</p>
           <h2>Você estará conosco?</h2>
-          <p>Preencha o formulário abaixo até dia 25/08/2026 (Terça-feira)</p>
+          <p>Preencha o formulário abaixo até dia 01/09/2026</p>
         </div>
 
         {submitted ? (

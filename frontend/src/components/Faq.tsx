@@ -21,7 +21,7 @@ export function Faq() {
     {
       q: "Posso levar acompanhante?",
       a: "Sim! São considerados acompanhantes:",
-      list: ["Namorado(a)", "Marido", "Esposa", "Filhos(as)"],
+      list: ["Namorado(a)", "Noivo(a)", "Marido", "Esposa", "Filhos(as)"],
       outro: "Pedimos, por gentileza, que o convite seja restrito a essas pessoas.",
       open: false,
     },
