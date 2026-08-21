@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { api, API_URL } from "../services/api";
+import { PrivacyModal } from "./PrivacyModal";
 
 interface RsvpFormProps {
   weddingSlug: string;
@@ -35,6 +36,7 @@ export function RsvpForm({
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const lettersOnly = event.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
@@ -307,10 +309,10 @@ export function RsvpForm({
             )}
 
             <div className="rsvp-field">
-              <label>Nome completo *</label>
+              <label>Nome e Sobrenome *</label>
               <input
                 type="text"
-                placeholder="Seu nome completo"
+                placeholder="Nome e Sobrenome"
                 required
                 value={name}
                 onChange={handleNameChange}
@@ -405,9 +407,13 @@ export function RsvpForm({
             <button type="submit" disabled={loading} className="preview-button">
               {loading ? "Enviando..." : "Enviar confirmação"}
             </button>
+            <p className="privacy-notice">
+              Ao enviar sua confirmação, seus dados serão usados para registrar sua presença e organizar o evento. <button type="button" className="privacy-link-button" onClick={() => setPrivacyOpen(true)}>Leia nosso Aviso de Privacidade.</button>
+            </p>
           </form>
         )}
       </div>
+      {privacyOpen && <PrivacyModal onClose={() => setPrivacyOpen(false)} />}
     </section>
   );
 }

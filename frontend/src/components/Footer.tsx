@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { PrivacyModal } from "./PrivacyModal";
+
 export function Footer() {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+
   return (
     <footer className="site-footer">
       <div className="eyebrow">
@@ -12,9 +17,15 @@ export function Footer() {
         T <span>&amp;</span> T
       </div>
       <p className="developed-by">Desenvolvido por Tiago, com ajuda da minha esposa rs</p>
+      <div className="footer-links">
+        <button type="button" onClick={() => setPrivacyOpen(true)}>
+          Aviso de Privacidade
+        </button>
+      </div>
       <a className="back-to-top" href="#inicio" aria-label="Voltar ao início da página">
         ↑
       </a>
+      {privacyOpen && <PrivacyModal onClose={() => setPrivacyOpen(false)} />}
     </footer>
   );
 }
