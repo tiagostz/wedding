@@ -478,6 +478,18 @@ a {
   font-size: 12px;
 }
 
+.event-list {
+  margin: 10px 0 4px;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  list-style: disc;
+}
+
+.event-list li + li {
+  margin-top: 4px;
+}
+
 .map-link {
   display: inline-block;
   margin-top: 22px;
@@ -894,6 +906,7 @@ a {
 .faq-answer ul {
   margin: 0 0 12px;
   padding-left: 20px;
+  list-style: disc;
 }
 
 .site-footer {

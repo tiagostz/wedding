@@ -16,7 +16,7 @@ export function EventDetails() {
           <h3>
             Cerimônia
           </h3>
-          <p><strong>03 de outubro de 2026</strong>
+          <p><strong>03 de outubro de 2026 (sábado)</strong>
           </p>
           <p>Início da cerimônia às 11h — duração média de 40 minutos
           </p>
@@ -49,7 +49,7 @@ export function EventDetails() {
           <h3>
             Celebração
           </h3>
-          <p><strong>03 de outubro de 2026</strong>
+          <p><strong>03 de outubro de 2026 (sábado)</strong>
           </p>
           <p>Após a cerimônia
           </p>
@@ -57,6 +57,12 @@ export function EventDetails() {
           </p>
           <p>Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP
           </p>
+          <p><strong>Valores do buffet (em 20/08):</strong>
+          </p>
+          <ul className="event-list">
+            <li>Crianças de 06 a 11 anos: R$ 58,00</li>
+            <li>Adultos: R$ 79,90</li>
+          </ul>
           <div className="event-links">
             <a
               href="https://www.google.com/maps/search/?api=1&query=Macarronada+Italiana%2C+Avenida+Marechal+Carmona%2C+738%2C+Campinas%2C+SP"

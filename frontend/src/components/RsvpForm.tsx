@@ -397,7 +397,6 @@ export function RsvpForm({
               <label>Observações</label>
               <textarea
                 rows={3}
-                placeholder="Alguma restrição alimentar, alergias ou mensagem aos noivos..."
                 value={notes}
                 onChange={(event) => setNotes(event.target.value)}
               />

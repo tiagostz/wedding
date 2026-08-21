@@ -3,6 +3,8 @@ const COUPLE_NAME = "Tiago e Thayanne";
 const WEDDING_DATE = "03 de outubro de 2026, às 11h";
 const CEREMONY_LOCATION = "Paróquia Sant'Ana, Rua Mato Grosso, 305 — Vila Santana, Valinhos — SP";
 const RECEPTION_LOCATION = "Macarronada Italiana, Av. Marechal Carmona, 738 — Vila João Jorge, Campinas — SP";
+const CEREMONY_MAP_URL = "https://www.google.com/maps/search/?api=1&query=Rua+Mato+Grosso%2C+305%2C+Valinhos%2C+SP";
+const RECEPTION_MAP_URL = "https://www.google.com/maps/search/?api=1&query=Macarronada+Italiana%2C+Avenida+Marechal+Carmona%2C+738%2C+Campinas%2C+SP";
 
 // Execute esta função manualmente uma vez no editor para autorizar o envio de e-mails.
 function authorizeEmailAccess() {
@@ -70,7 +72,9 @@ function sendConfirmationEmail(data) {
         "Sua presença no casamento de " + COUPLE_NAME + " foi confirmada.",
         "Data: " + WEDDING_DATE,
         "Cerimônia: " + CEREMONY_LOCATION,
+        "Mapa da cerimônia: " + CEREMONY_MAP_URL,
         "Celebração: " + RECEPTION_LOCATION,
+        "Mapa da celebração: " + RECEPTION_MAP_URL,
         "Acompanhantes: " + companions.replace(/\n/g, ", "),
         "",
         "Adicione o evento ao Google Agenda: " + calendarUrl,
@@ -91,8 +95,8 @@ function sendConfirmationEmail(data) {
         "<p>Olá, " + escapeHtml(name) + "!</p>",
         "<p>Sua presença no casamento de <strong>" + COUPLE_NAME + "</strong> foi confirmada.</p>",
         "<p><strong>Data:</strong> " + WEDDING_DATE + "<br>",
-        "<strong>Cerimônia:</strong> " + CEREMONY_LOCATION + "<br>",
-        "<strong>Celebração:</strong> " + RECEPTION_LOCATION + "<br>",
+        '<strong>Cerimônia:</strong> <a href="' + CEREMONY_MAP_URL + '">' + CEREMONY_LOCATION + "</a><br>",
+        '<strong>Celebração:</strong> <a href="' + RECEPTION_MAP_URL + '">' + RECEPTION_LOCATION + "</a><br>",
         "<strong>Acompanhantes:</strong> " + escapeHtml(companions).replace(/\n/g, "<br>") + "</p>",
         '<p><a href="' + calendarUrl + '">Adicionar ao Google Agenda</a></p>',
         "<p>Será um prazer celebrar com você!</p>",
